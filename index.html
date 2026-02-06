@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tuned — Domain-Specific AI That Actually Works</title>
+    <meta name="description" content="Make AI accurate for YOUR industry. Gospel, Legal, Health, Finance. AI tuned for precision, not hallucination.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI Tuned — Domain-Specific AI That Actually Works">
+    <meta property="og:description" content="Make AI accurate for YOUR industry.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aituned.io">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --success: #22c55e;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray: #64748b;
+            --light: #f1f5f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: white;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem;
+            background: 
+                radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                var(--darker);
+        }
+        
+        .hero-content {
+            max-width: 900px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 6rem 2rem;
+            background: var(--dark);
+        }
+        
+        .problem-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .problem h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .problem > p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .problem-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+        
+        .problem-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Verticals */
+        .verticals {
+            padding: 6rem 2rem;
+        }
+        
+        .verticals-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .verticals h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .verticals > p {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+        
+        .verticals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .vertical-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .vertical-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+        }
+        
+        .vertical-card.live {
+            border-color: var(--success);
+        }
+        
+        .vertical-card .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .vertical-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .vertical-card .tagline {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .vertical-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .vertical-card .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+        
+        .status.soon {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent);
+        }
+        
+        .status.planned {
+            background: rgba(100, 116, 139, 0.2);
+            color: var(--gray);
+        }
+        
+        /* How It Works */
+        .how {
+            padding: 6rem 2rem;
+            background: var(--dark);
+        }
+        
+        .how-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .how h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .how-steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .how-step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .how-step .number {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .how-step h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .how-step p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA */
+        .cta {
+            padding: 6rem 2rem;
+            text-align: center;
+            background: 
+                radial-gradient(ellipse at center, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                var(--darker);
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .how-steps {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="/" class="logo">AI Tuned</a>
+            <div class="nav-links">
+                <a href="#verticals">Products</a>
+                <a href="#how">How It Works</a>
+                <a href="mailto:hello@aituned.io">Contact</a>
+                <a href="https://lessoncraft.aituned.io" class="btn">Try Gospel Tuned</a>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">🎯 AI That Actually Works For Your Industry</div>
+            <h1>Generic AI Fails Experts.<br><span>Tuned AI Delivers.</span></h1>
+            <p>We build domain-specific AI with built-in verification, compliance guardrails, and industry expertise. No hallucinations. No guesswork. Just accurate results.</p>
+            <div class="hero-buttons">
+                <a href="https://lessoncraft.aituned.io" class="btn">Try Gospel Tuned Free</a>
+                <a href="#verticals" class="btn btn-outline">Explore Products</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem -->
+    <section class="problem">
+        <div class="problem-content">
+            <h2>The Problem With Generic AI</h2>
+            <p>ChatGPT and friends are great for general tasks. But when accuracy matters, they fail.</p>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="icon">🎭</div>
+                    <h3>Hallucinations</h3>
+                    <p>AI makes up facts, quotes, and citations that look real but aren't.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">⚖️</div>
+                    <h3>Compliance Risks</h3>
+                    <p>Regulated industries can't use AI that might generate incorrect advice.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">💸</div>
+                    <h3>Expensive Mistakes</h3>
+                    <p>Bad AI output costs real money — in corrections, reputation, and lawsuits.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🤷</div>
+                    <h3>No Domain Expertise</h3>
+                    <p>Generic AI doesn't understand the nuances of your specific industry.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Verticals -->
+    <section class="verticals" id="verticals">
+        <div class="verticals-content">
+            <h2>AI Tuned For Every Industry</h2>
+            <p>Each product is built with domain expertise, specialized verification, and industry-specific guardrails.</p>
+            <div class="verticals-grid">
+                <div class="vertical-card live">
+                    <div class="emoji">📖</div>
+                    <h3>Gospel Tuned</h3>
+                    <div class="tagline">AI for Faith Communities</div>
+                    <p>Scripture-accurate AI for lesson preparation, talk writing, and religious study. Verified against canonical sources.</p>
+                    <span class="status live">● Live Now</span>
+                </div>
+                
+                <div class="vertical-card">
+                    <div class="emoji">⚖️</div>
+                    <h3>Legal Tuned</h3>
+                    <div class="tagline">AI for Law Firms</div>
+                    <p>Contract review, legal research, and compliance documentation. Verified against case law and statutes.</p>
+                    <span class="status soon">Coming Q3 2026</span>
+                </div>
+                
+                <div class="vertical-card">
+                    <div class="emoji">🏥</div>
+                    <h3>Health Tuned</h3>
+                    <div class="tagline">AI for Healthcare</div>
+                    <p>Patient education, medical documentation, and clinical support. HIPAA-compliant and medically verified.</p>
+                    <span class="status planned">Planned</span>
+                </div>
+                
+                <div class="vertical-card">
+                    <div class="emoji">📊</div>
+                    <h3>Finance Tuned</h3>
+                    <div class="tagline">AI for Financial Services</div>
+                    <p>Investment research, compliance reporting, and financial analysis. SEC and FINRA aware.</p>
+                    <span class="status planned">Planned</span>
+                </div>
+                
+                <div class="vertical-card">
+                    <div class="emoji">🎓</div>
+                    <h3>Edu Tuned</h3>
+                    <div class="tagline">AI for Education</div>
+                    <p>Curriculum development, tutoring, and assessment. Aligned with educational standards.</p>
+                    <span class="status planned">Planned</span>
+                </div>
+                
+                <div class="vertical-card">
+                    <div class="emoji">🔧</div>
+                    <h3>Your Industry</h3>
+                    <div class="tagline">Custom AI Tuning</div>
+                    <p>Need AI tuned for your specific industry? Let's talk about a custom solution.</p>
+                    <span class="status planned">Contact Us</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how" id="how">
+        <div class="how-content">
+            <h2>How AI Tuning Works</h2>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="number">1</div>
+                    <h3>Domain Expertise</h3>
+                    <p>We work with industry experts to understand what "accurate" means in your field.</p>
+                </div>
+                <div class="how-step">
+                    <div class="number">2</div>
+                    <h3>Verification Layer</h3>
+                    <p>Every AI output is checked against authoritative sources specific to your industry.</p>
+                </div>
+                <div class="how-step">
+                    <div class="number">3</div>
+                    <h3>Compliance Guards</h3>
+                    <p>Built-in guardrails ensure outputs meet regulatory requirements for your field.</p>
+                </div>
+                <div class="how-step">
+                    <div class="number">4</div>
+                    <h3>Continuous Tuning</h3>
+                    <p>We constantly improve accuracy based on real-world usage and feedback.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Ready for AI That Actually Works?</h2>
+        <p>Start with Gospel Tuned today, or contact us about your industry.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="https://lessoncraft.aituned.io" class="btn">Try Gospel Tuned Free</a>
+            <a href="mailto:hello@aituned.io" class="btn btn-outline">Contact Sales</a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="mailto:hello@aituned.io">Contact</a>
+                <a href="https://twitter.com/aituned">Twitter</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 AI Tuned. All rights reserved.<br>
+                <small>Building domain-specific AI that actually works.</small>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
