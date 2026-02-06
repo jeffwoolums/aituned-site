@@ -3,47 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tuned — Domain-Specific AI That Actually Works</title>
-    <meta name="description" content="Make AI accurate for YOUR industry. Gospel, Legal, Health, Finance. AI tuned for precision, not hallucination.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="AI Tuned — Domain-Specific AI That Actually Works">
-    <meta property="og:description" content="Make AI accurate for YOUR industry.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aituned.io">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
-    
-    <!-- Fonts -->
+    <title>AITuned | Enterprise AI Engineering</title>
+    <meta name="description" content="Precision AI solutions for mission-critical industries. Custom AI development, domain-specific fine-tuning, and enterprise deployment.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --accent: #f59e0b;
-            --success: #22c55e;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
             --dark: #0f172a;
             --darker: #020617;
+            --light: #f8fafc;
             --gray: #64748b;
-            --light: #f1f5f9;
+            --gray-light: #94a3b8;
+            --success: #10b981;
+            --border: rgba(255,255,255,0.1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             background: var(--darker);
-            color: white;
+            color: var(--light);
             line-height: 1.6;
         }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         
         /* Header */
         header {
@@ -51,566 +39,496 @@
             width: 100%;
             top: 0;
             z-index: 100;
-            padding: 1rem 2rem;
-            background: rgba(2, 6, 23, 0.8);
+            padding: 1rem 0;
+            background: rgba(2,6,23,0.9);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border);
         }
-        
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 800;
             text-decoration: none;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            color: var(--gray);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        
-        .nav-links a:hover {
-            color: white;
-        }
-        
-        .btn {
-            background: var(--primary);
+        nav { display: flex; gap: 2rem; align-items: center; }
+        nav a { color: var(--gray-light); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        nav a:hover { color: white; }
+        .btn-primary {
+            background: var(--gradient);
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,99,235,0.3); }
+
         /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 6rem 2rem;
-            background: 
-                radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom right, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
-                var(--darker);
+            position: relative;
+            padding-top: 80px;
+            overflow: hidden;
         }
-        
-        .hero-content {
-            max-width: 900px;
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, rgba(37,99,235,0.15), transparent 50%),
+                        radial-gradient(ellipse at bottom right, rgba(124,58,237,0.1), transparent 50%);
+            z-index: -1;
         }
-        
-        .badge {
-            display: inline-block;
-            background: rgba(99, 102, 241, 0.2);
-            color: var(--primary);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(99, 102, 241, 0.3);
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+            z-index: -1;
         }
-        
+        .hero-content { max-width: 800px; }
         .hero h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 1.5rem;
-        }
-        
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(to right, white, var(--gray-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--gray);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        /* Problem Section */
-        .problem {
-            padding: 6rem 2rem;
-            background: var(--dark);
-        }
-        
-        .problem-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .problem h2 {
+        .hero p { font-size: 1.25rem; color: var(--gray-light); margin-bottom: 2rem; max-width: 600px; }
+
+        /* Sections */
+        section { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-title {
             font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
+            background: linear-gradient(to right, white, var(--gray-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        .problem > p {
-            color: var(--gray);
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-        }
-        
-        .problem-grid {
+        .section-subtitle { color: var(--gray); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Industries Grid */
+        .industries-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
         }
-        
-        .problem-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: left;
-        }
-        
-        .problem-card .icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .problem-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .problem-card p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        /* Verticals */
-        .verticals {
-            padding: 6rem 2rem;
-        }
-        
-        .verticals-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .verticals h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .verticals > p {
-            text-align: center;
-            color: var(--gray);
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-        }
-        
-        .verticals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .vertical-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
+        .industry-card {
+            background: rgba(30,41,59,0.5);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s;
+            padding: 32px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        .vertical-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+        .industry-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .industry-icon { font-size: 2.5rem; margin-bottom: 1rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .industry-card h3 { font-size: 1.4rem; margin-bottom: 1rem; color: white; }
+        .industry-card ul { list-style: none; }
+        .industry-card li { color: var(--gray-light); margin-bottom: 8px; padding-left: 20px; position: relative; }
+        .industry-card li::before { content: '→'; position: absolute; left: 0; color: var(--primary); }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
         }
-        
-        .vertical-card.live {
-            border-color: var(--success);
+        .service-card {
+            background: rgba(30,41,59,0.5);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: border-color 0.3s;
         }
-        
-        .vertical-card .emoji {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .service-card:hover { border-color: var(--primary); }
+        .service-icon { font-size: 3rem; margin-bottom: 1.5rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .service-card h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+        .service-card p { color: var(--gray); }
+
+        /* Trust */
+        .trust-section {
+            background: rgba(30,41,59,0.5);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 60px;
+            text-align: center;
         }
-        
-        .vertical-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .vertical-card .tagline {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        
-        .vertical-card p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-        }
-        
-        .vertical-card .status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
+        .trust-badges { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 40px; }
+        .badge {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            padding: 12px 24px;
             border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .status.live {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--success);
-        }
-        
-        .status.soon {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--accent);
-        }
-        
-        .status.planned {
-            background: rgba(100, 116, 139, 0.2);
-            color: var(--gray);
-        }
-        
-        /* How It Works */
-        .how {
-            padding: 6rem 2rem;
-            background: var(--dark);
-        }
-        
-        .how-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .how h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-        }
-        
-        .how-steps {
+            font-weight: 500;
             display: flex;
-            justify-content: space-between;
-            gap: 2rem;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .how-step {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
+        .badge i { color: var(--success); }
+
+        /* Contact */
+        .contact-form {
+            background: rgba(30,41,59,0.5);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        
-        .how-step .number {
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+        select.form-control { cursor: pointer; }
+        textarea.form-control { min-height: 120px; resize: vertical; }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .submit-btn:hover { transform: translateY(-2px); }
+        .form-success { display: none; text-align: center; padding: 40px; }
+        .form-success.show { display: block; }
+        .form-success i { font-size: 4rem; color: var(--success); margin-bottom: 1rem; }
+
+        /* Footer */
+        footer {
+            background: rgba(15,23,42,0.8);
+            border-top: 1px solid var(--border);
+            padding: 60px 0 30px;
+        }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 40px; }
+        .footer-logo { font-size: 1.5rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; display: inline-block; }
+        .footer-desc { color: var(--gray); margin-bottom: 1.5rem; }
+        .social-links { display: flex; gap: 12px; }
+        .social-link {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.05);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin: 0 auto 1rem;
-        }
-        
-        .how-step h3 {
-            margin-bottom: 0.5rem;
-        }
-        
-        .how-step p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        /* CTA */
-        .cta {
-            padding: 6rem 2rem;
-            text-align: center;
-            background: 
-                radial-gradient(ellipse at center, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
-                var(--darker);
-        }
-        
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .cta p {
-            color: var(--gray);
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-        
-        /* Footer */
-        footer {
-            padding: 3rem 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-links a {
-            color: var(--gray);
+            color: var(--gray-light);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: background 0.2s, color 0.2s;
         }
-        
-        .footer-links a:hover {
-            color: white;
-        }
-        
-        .footer-copy {
-            color: var(--gray);
-            font-size: 0.875rem;
-        }
-        
-        /* Responsive */
+        .social-link:hover { background: var(--primary); color: white; }
+        .footer-links h4 { margin-bottom: 1rem; font-size: 1.1rem; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: var(--gray); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: white; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid var(--border); color: var(--gray); }
+
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .how-steps {
-                flex-direction: column;
-            }
+            .form-row { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            nav { display: none; }
+            .contact-form, .trust-section { padding: 40px 24px; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <nav>
-            <a href="/" class="logo">AI Tuned</a>
-            <div class="nav-links">
-                <a href="#verticals">Products</a>
-                <a href="#how">How It Works</a>
-                <a href="mailto:hello@aituned.io">Contact</a>
-                <a href="https://lessoncraft.aituned.io" class="btn">Try Gospel Tuned</a>
-            </div>
-        </nav>
+        <div class="container header-inner">
+            <a href="#" class="logo">AITuned</a>
+            <nav>
+                <a href="#industries">Industries</a>
+                <a href="#services">Services</a>
+                <a href="#trust">Trust</a>
+                <a href="#contact" class="btn-primary">Request Consultation</a>
+            </nav>
+        </div>
     </header>
-    
-    <!-- Hero -->
+
     <section class="hero">
-        <div class="hero-content">
-            <div class="badge">🎯 AI That Actually Works For Your Industry</div>
-            <h1>Generic AI Fails Experts.<br><span>Tuned AI Delivers.</span></h1>
-            <p>We build domain-specific AI with built-in verification, compliance guardrails, and industry expertise. No hallucinations. No guesswork. Just accurate results.</p>
-            <div class="hero-buttons">
-                <a href="https://lessoncraft.aituned.io" class="btn">Try Gospel Tuned Free</a>
-                <a href="#verticals" class="btn btn-outline">Explore Products</a>
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Enterprise AI Engineering</h1>
+                <p>Precision AI solutions for mission-critical industries. We build, deploy, and optimize custom AI systems that transform how organizations operate.</p>
+                <a href="#contact" class="btn-primary">Request Consultation →</a>
             </div>
         </div>
     </section>
-    
-    <!-- Problem -->
-    <section class="problem">
-        <div class="problem-content">
-            <h2>The Problem With Generic AI</h2>
-            <p>ChatGPT and friends are great for general tasks. But when accuracy matters, they fail.</p>
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="icon">🎭</div>
-                    <h3>Hallucinations</h3>
-                    <p>AI makes up facts, quotes, and citations that look real but aren't.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="icon">⚖️</div>
-                    <h3>Compliance Risks</h3>
-                    <p>Regulated industries can't use AI that might generate incorrect advice.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="icon">💸</div>
-                    <h3>Expensive Mistakes</h3>
-                    <p>Bad AI output costs real money — in corrections, reputation, and lawsuits.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="icon">🤷</div>
-                    <h3>No Domain Expertise</h3>
-                    <p>Generic AI doesn't understand the nuances of your specific industry.</p>
-                </div>
+
+    <section id="industries">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Industry Expertise</h2>
+                <p class="section-subtitle">Tailored AI solutions across mission-critical sectors</p>
             </div>
-        </div>
-    </section>
-    
-    <!-- Verticals -->
-    <section class="verticals" id="verticals">
-        <div class="verticals-content">
-            <h2>AI Tuned For Every Industry</h2>
-            <p>Each product is built with domain expertise, specialized verification, and industry-specific guardrails.</p>
-            <div class="verticals-grid">
-                <div class="vertical-card live">
-                    <div class="emoji">📖</div>
-                    <h3>Gospel Tuned</h3>
-                    <div class="tagline">AI for Faith Communities</div>
-                    <p>Scripture-accurate AI for lesson preparation, talk writing, and religious study. Verified against canonical sources.</p>
-                    <span class="status live">● Live Now</span>
+            <div class="industries-grid">
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-heartbeat"></i></div>
+                    <h3>Healthcare</h3>
+                    <ul>
+                        <li>Clinical decision support</li>
+                        <li>Medical imaging & diagnostics</li>
+                        <li>Patient outcome prediction</li>
+                    </ul>
                 </div>
-                
-                <div class="vertical-card">
-                    <div class="emoji">⚖️</div>
-                    <h3>Legal Tuned</h3>
-                    <div class="tagline">AI for Law Firms</div>
-                    <p>Contract review, legal research, and compliance documentation. Verified against case law and statutes.</p>
-                    <span class="status soon">Coming Q3 2026</span>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Financial Services</h3>
+                    <ul>
+                        <li>Risk modeling & assessment</li>
+                        <li>Fraud detection systems</li>
+                        <li>Algorithmic trading</li>
+                    </ul>
                 </div>
-                
-                <div class="vertical-card">
-                    <div class="emoji">🏥</div>
-                    <h3>Health Tuned</h3>
-                    <div class="tagline">AI for Healthcare</div>
-                    <p>Patient education, medical documentation, and clinical support. HIPAA-compliant and medically verified.</p>
-                    <span class="status planned">Planned</span>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-balance-scale"></i></div>
+                    <h3>Legal</h3>
+                    <ul>
+                        <li>Contract analysis & review</li>
+                        <li>Case research automation</li>
+                        <li>Compliance monitoring</li>
+                    </ul>
                 </div>
-                
-                <div class="vertical-card">
-                    <div class="emoji">📊</div>
-                    <h3>Finance Tuned</h3>
-                    <div class="tagline">AI for Financial Services</div>
-                    <p>Investment research, compliance reporting, and financial analysis. SEC and FINRA aware.</p>
-                    <span class="status planned">Planned</span>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Energy</h3>
+                    <ul>
+                        <li>Grid optimization</li>
+                        <li>Predictive maintenance</li>
+                        <li>Sustainability analytics</li>
+                    </ul>
                 </div>
-                
-                <div class="vertical-card">
-                    <div class="emoji">🎓</div>
-                    <h3>Edu Tuned</h3>
-                    <div class="tagline">AI for Education</div>
-                    <p>Curriculum development, tutoring, and assessment. Aligned with educational standards.</p>
-                    <span class="status planned">Planned</span>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-industry"></i></div>
+                    <h3>Manufacturing</h3>
+                    <ul>
+                        <li>Quality control automation</li>
+                        <li>Supply chain intelligence</li>
+                        <li>Robotics & automation</li>
+                    </ul>
                 </div>
-                
-                <div class="vertical-card">
-                    <div class="emoji">🔧</div>
-                    <h3>Your Industry</h3>
-                    <div class="tagline">Custom AI Tuning</div>
-                    <p>Need AI tuned for your specific industry? Let's talk about a custom solution.</p>
-                    <span class="status planned">Contact Us</span>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-landmark"></i></div>
+                    <h3>Government</h3>
+                    <ul>
+                        <li>Security & intelligence</li>
+                        <li>Public service optimization</li>
+                        <li>Policy analysis</li>
+                    </ul>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <h3>Retail</h3>
+                    <ul>
+                        <li>Personalization engines</li>
+                        <li>Inventory optimization</li>
+                        <li>Customer insights</li>
+                    </ul>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon"><i class="fas fa-book"></i></div>
+                    <h3>Education & Faith</h3>
+                    <ul>
+                        <li>Adaptive learning systems</li>
+                        <li>Content generation</li>
+                        <li>Community engagement</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- How It Works -->
-    <section class="how" id="how">
-        <div class="how-content">
-            <h2>How AI Tuning Works</h2>
-            <div class="how-steps">
-                <div class="how-step">
-                    <div class="number">1</div>
-                    <h3>Domain Expertise</h3>
-                    <p>We work with industry experts to understand what "accurate" means in your field.</p>
+
+    <section id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Services</h2>
+                <p class="section-subtitle">End-to-end AI engineering for enterprise</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Custom AI Development</h3>
+                    <p>Purpose-built models designed for your specific use case and data.</p>
                 </div>
-                <div class="how-step">
-                    <div class="number">2</div>
-                    <h3>Verification Layer</h3>
-                    <p>Every AI output is checked against authoritative sources specific to your industry.</p>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-sliders-h"></i></div>
+                    <h3>Domain Fine-Tuning</h3>
+                    <p>Adapt foundation models to understand your industry's language and context.</p>
                 </div>
-                <div class="how-step">
-                    <div class="number">3</div>
-                    <h3>Compliance Guards</h3>
-                    <p>Built-in guardrails ensure outputs meet regulatory requirements for your field.</p>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Enterprise Deployment</h3>
+                    <p>Secure, scalable infrastructure with monitoring and compliance built-in.</p>
                 </div>
-                <div class="how-step">
-                    <div class="number">4</div>
-                    <h3>Continuous Tuning</h3>
-                    <p>We constantly improve accuracy based on real-world usage and feedback.</p>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-sync"></i></div>
+                    <h3>Ongoing Optimization</h3>
+                    <p>Continuous improvement, retraining, and performance monitoring.</p>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- CTA -->
-    <section class="cta">
-        <h2>Ready for AI That Actually Works?</h2>
-        <p>Start with Gospel Tuned today, or contact us about your industry.</p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <a href="https://lessoncraft.aituned.io" class="btn">Try Gospel Tuned Free</a>
-            <a href="mailto:hello@aituned.io" class="btn btn-outline">Contact Sales</a>
+
+    <section id="trust">
+        <div class="container">
+            <div class="trust-section">
+                <h2 class="section-title">Built for Trust</h2>
+                <p class="section-subtitle">Enterprise-grade security and compliance from day one</p>
+                <div class="trust-badges">
+                    <div class="badge"><i class="fas fa-check-circle"></i> SOC 2 Ready</div>
+                    <div class="badge"><i class="fas fa-check-circle"></i> HIPAA Compliant</div>
+                    <div class="badge"><i class="fas fa-check-circle"></i> US-Based Infrastructure</div>
+                    <div class="badge"><i class="fas fa-check-circle"></i> End-to-End Encryption</div>
+                    <div class="badge"><i class="fas fa-check-circle"></i> 24/7 Monitoring</div>
+                </div>
+            </div>
         </div>
     </section>
-    
-    <!-- Footer -->
+
+    <section id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Start Your AI Journey</h2>
+                <p class="section-subtitle">Tell us about your project and we'll be in touch within 24 hours</p>
+            </div>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="industry">Industry</label>
+                            <select id="industry" name="industry" class="form-control">
+                                <option value="">Select industry...</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="finance">Financial Services</option>
+                                <option value="legal">Legal</option>
+                                <option value="energy">Energy</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="government">Government</option>
+                                <option value="retail">Retail</option>
+                                <option value="education">Education</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">How can we help? *</label>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Request Consultation</button>
+                </form>
+                <div class="form-success" id="formSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Thank you!</h3>
+                    <p>We'll be in touch within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="/privacy">Privacy</a>
-                <a href="/terms">Terms</a>
-                <a href="mailto:hello@aituned.io">Contact</a>
-                <a href="https://twitter.com/aituned">Twitter</a>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">AITuned</div>
+                    <p class="footer-desc">Enterprise AI engineering for mission-critical applications.</p>
+                    <div class="social-links">
+                        <a href="https://linkedin.com" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://github.com" class="social-link"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#industries">Industries</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-copy">
-                © 2026 AI Tuned. All rights reserved.<br>
-                <small>Building domain-specific AI that actually works.</small>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AITuned. All rights reserved.</p>
             </div>
         </div>
     </footer>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                name: form.name.value,
+                email: form.email.value,
+                company: form.company.value,
+                industry: form.industry.value,
+                message: form.message.value
+            };
+            
+            try {
+                const response = await fetch('https://api.aituned.io/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('formSuccess').classList.add('show');
+                } else {
+                    alert('Something went wrong. Please email us at contact@aituned.io');
+                }
+            } catch (err) {
+                alert('Something went wrong. Please email us at contact@aituned.io');
+            }
+        });
+    </script>
 </body>
 </html>
