@@ -387,11 +387,19 @@
     </div>
 
     <script>
-        // Extract episode ID from URL path
+        // Extract episode ID from URL path or query parameter
         function getEpisodeId() {
+            // First try URL path
             const path = window.location.pathname;
-            const match = path.match(/\/listen\/(.+)/);
-            return match ? match[1] : null;
+            const pathMatch = path.match(/\/listen\/(.+)/);
+            if (pathMatch) return pathMatch[1];
+            
+            // Fallback to query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const episodeParam = urlParams.get('episode');
+            if (episodeParam) return episodeParam;
+            
+            return null;
         }
 
         // Resolve audio URL
