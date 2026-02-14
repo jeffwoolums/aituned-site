@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Share Your Story — LessonCraft</title>
+  <meta name="description" content="Share your faith testimony, conversion story, prayer answer, miracle, or faith journey with the LessonCraft community." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #1a1a2e;
+      --gold: #c9a84c;
+      --cream: #f5f0e8;
+      --ink: #1b1b22;
+      --muted: rgba(26,26,46,0.72);
+      --card: rgba(255,255,255,0.78);
+      --border: rgba(26,26,46,0.14);
+      --shadow: 0 18px 60px rgba(26,26,46,0.14);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 15% 0%, rgba(201,168,76,0.18), transparent 55%),
+                  radial-gradient(1100px 640px at 95% 15%, rgba(26,26,46,0.16), transparent 60%),
+                  linear-gradient(180deg, #fbf7f1 0%, var(--cream) 55%, #f0ece4 100%);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    a { color: var(--navy); }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--navy), #26314a 55%, #1f3b36);
+      color: white;
+      padding: 44px 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 68% 28%, rgba(201,168,76,0.22), transparent 55%),
+        radial-gradient(circle at 10% 75%, rgba(255,255,255,0.08), transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; display: grid; gap: 16px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      align-self: start;
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+    .badge .dot {
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.18);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      font-size: clamp(34px, 6vw, 54px);
+      line-height: 1.05;
+    }
+    .hero h1 span { color: var(--gold); }
+
+    .hero p {
+      margin: 0;
+      max-width: 62ch;
+      color: rgba(255,255,255,0.86);
+      font-size: 16px;
+    }
+
+    .hero-art {
+      position: absolute;
+      right: -40px;
+      bottom: -30px;
+      width: min(520px, 68vw);
+      opacity: 0.13;
+      transform: rotate(-2deg);
+      pointer-events: none;
+    }
+
+    /* Content */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    @media (min-width: 920px) {
+      .grid { grid-template-columns: 1.6fr 1fr; align-items: start; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 40px rgba(26,26,46,0.10);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .card .hd {
+      padding: 18px 18px 0;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--navy);
+    }
+
+    .card .sub {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card .bd { padding: 18px; }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      padding: 12px 12px 0;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.72);
+      color: var(--navy);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    }
+
+    .tab[aria-selected="true"] {
+      background: rgba(201,168,76,0.18);
+      border-color: rgba(201,168,76,0.55);
+    }
+
+    .tab:active { transform: translateY(1px); }
+
+    form { display: grid; gap: 14px; }
+
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 560px) { .row { grid-template-columns: 1fr 1fr; } }
+
+    label {
+      display: block;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(26,26,46,0.16);
+      background: rgba(255,255,255,0.9);
+      color: var(--ink);
+      font-size: 15px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(201,168,76,0.75);
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.16);
+    }
+
+    .checkline {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(26,26,46,0.12);
+      background: rgba(255,255,255,0.62);
+    }
+
+    .checkline input { margin-top: 4px; }
+    .checkline .ct { font-size: 13px; color: rgba(26,26,46,0.86); }
+    .checkline .ct strong { color: var(--navy); }
+
+    .divider {
+      height: 1px;
+      background: rgba(26,26,46,0.12);
+      margin: 6px 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(26,26,46,0.16);
+      background: white;
+      color: var(--navy);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), #e2c26e);
+      border-color: rgba(201,168,76,0.45);
+      color: #2a2310;
+      box-shadow: 0 10px 26px rgba(201,168,76,0.22);
+    }
+
+    .btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+    .status {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(26,26,46,0.14);
+      background: rgba(255,255,255,0.66);
+      color: rgba(26,26,46,0.86);
+      font-size: 13px;
+      display: none;
+    }
+
+    .status.ok { border-color: rgba(42,140,86,0.35); background: rgba(42,140,86,0.08); }
+    .status.err { border-color: rgba(176,58,58,0.30); background: rgba(176,58,58,0.08); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(26,26,46,0.76);
+      background: rgba(26,26,46,0.06);
+      border: 1px solid rgba(26,26,46,0.10);
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .mini { font-size: 12px; color: var(--muted); }
+
+    /* Voice */
+    .voice {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px dashed rgba(26,26,46,0.22);
+      background: rgba(255,255,255,0.55);
+    }
+
+    .voice .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    audio { width: 100%; }
+
+    /* Side prompts */
+    .prompt h3 {
+      margin: 0;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 22px;
+      color: var(--navy);
+    }
+
+    .prompt ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: rgba(26,26,46,0.86);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .example {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.25);
+      color: rgba(26,26,46,0.86);
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 18px 0 6px;
+      color: rgba(26,26,46,0.62);
+      font-size: 12px;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="badge"><span class="dot"></span> LessonCraft Community</div>
+        <h1>Share Your <span>Story</span></h1>
+        <p>
+          Your testimony matters. If you’ve seen God’s hand in your life—through a conversion, a prayer answered, a miracle,
+          or a faith journey—we’d be honored to receive it.
+        </p>
+        <p class="mini">
+          Privacy promise: your full name & email are stored for verification only and are <strong>never</strong> displayed publicly.
+          You may optionally show your initials.
+        </p>
+      </div>
+
+      <!-- subtle temple/nature silhouette -->
+      <svg class="hero-art" viewBox="0 0 900 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 295C110 280 155 240 240 245C340 252 360 290 460 285C555 280 580 238 670 232C760 226 815 250 900 245V340H0V295Z" fill="white"/>
+        <path d="M130 270C170 240 210 215 250 190C290 165 315 155 350 155C385 155 415 168 450 188C485 208 530 240 570 260" stroke="white" stroke-width="14" stroke-linecap="round"/>
+        <path d="M610 270C650 245 690 220 730 195C760 176 785 168 810 168C835 168 860 176 885 188" stroke="white" stroke-width="14" stroke-linecap="round"/>
+        <path d="M410 60L450 10L490 60" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M450 12V128" stroke="white" stroke-width="14" stroke-linecap="round"/>
+        <path d="M380 150H520" stroke="white" stroke-width="14" stroke-linecap="round"/>
+        <path d="M400 150V245" stroke="white" stroke-width="14" stroke-linecap="round"/>
+        <path d="M500 150V245" stroke="white" stroke-width="14" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="grid">
+      <div class="card" id="submission-card">
+        <div class="tabs" role="tablist" aria-label="Submission methods">
+          <button class="tab" type="button" role="tab" aria-selected="true" data-tab="type">Type your story</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="voice">Record your voice</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="email">Email it in</button>
+        </div>
+
+        <div class="hd">
+          <h2>Submit a testimony</h2>
+          <p class="sub">Submissions are reviewed before being shared in the LessonCraft app.</p>
+        </div>
+
+        <div class="bd">
+          <div id="status" class="status" role="status"></div>
+
+          <form id="story-form">
+            <div class="row">
+              <div>
+                <label for="name">Full name <span class="mini">(required, never displayed)</span></label>
+                <input id="name" name="name" type="text" autocomplete="name" required maxlength="120" />
+              </div>
+              <div>
+                <label for="email">Email address <span class="mini">(required)</span></label>
+                <input id="email" name="email" type="email" autocomplete="email" required maxlength="254" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label for="location">Location <span class="mini">(required)</span></label>
+                <input id="location" name="location" type="text" placeholder="City / State (or Country)" required maxlength="120" />
+              </div>
+              <div>
+                <label for="category">Story category <span class="mini">(required)</span></label>
+                <select id="category" name="category" required>
+                  <option value="Testimony">Testimony</option>
+                  <option value="Conversion">Conversion</option>
+                  <option value="Prayer Answer">Prayer Answer</option>
+                  <option value="Faith Journey">Faith Journey</option>
+                  <option value="Miracle">Miracle</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label for="faithTradition">Faith tradition <span class="mini">(optional)</span></label>
+                <input id="faithTradition" name="faithTradition" type="text" list="traditions" placeholder="LDS, Catholic, Baptist…" maxlength="80" />
+                <datalist id="traditions">
+                  <option value="LDS"></option>
+                  <option value="Catholic"></option>
+                  <option value="Baptist"></option>
+                  <option value="Methodist"></option>
+                  <option value="Non-denominational"></option>
+                  <option value="Pentecostal"></option>
+                  <option value="Presbyterian"></option>
+                  <option value="Lutheran"></option>
+                  <option value="Orthodox"></option>
+                  <option value="Anglican"></option>
+                </datalist>
+              </div>
+              <div>
+                <label>Display name <span class="mini">(optional)</span></label>
+                <div class="checkline">
+                  <input id="displayInitials" name="displayInitials" type="checkbox" />
+                  <div class="ct">
+                    <strong>Show my initials</strong> with my story (example: <span id="initials-preview">J.W.</span>)
+                    <div class="hint">Your full name is never shown publicly.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="panel-type">
+              <label for="story">Your story <span class="mini">(required, 2000 word max)</span></label>
+              <textarea id="story" name="story" placeholder="Write your testimony or experience here…" required></textarea>
+              <div class="actions">
+                <span class="pill"><strong id="wordCount">0</strong> words</span>
+                <span class="pill">Tip: share what changed, what you learned, and how you felt</span>
+              </div>
+            </div>
+
+            <div id="panel-voice" class="hidden">
+              <div class="voice">
+                <div class="pill">Optional voice recording (up to 3 minutes)</div>
+                <div class="controls">
+                  <button class="btn" type="button" id="btnStart">Start recording</button>
+                  <button class="btn" type="button" id="btnStop" disabled>Stop</button>
+                  <button class="btn" type="button" id="btnClear" disabled>Clear</button>
+                  <span class="mini" id="recStatus">Not recording</span>
+                </div>
+                <audio id="audio" controls class="hidden"></audio>
+                <div class="hint" id="voiceHint">
+                  If recording isn’t available on your device/browser, you can still submit a written story (or email it in).
+                </div>
+              </div>
+            </div>
+
+            <div id="panel-email" class="hidden">
+              <div class="example">
+                Prefer email? Send your story to <strong>stories@tredtechnologies.com</strong> with:
+                <ul>
+                  <li>Your full name</li>
+                  <li>Your location</li>
+                  <li>Your story category</li>
+                  <li>Your story (written) or an attached audio file</li>
+                </ul>
+                <div class="hint">If you email it in, you don’t need to submit this form.</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="checkline">
+              <input id="ageConfirmed" name="ageConfirmed" type="checkbox" required />
+              <div class="ct">
+                <strong>Age confirmation:</strong> I confirm that I am 18 years or older.
+              </div>
+            </div>
+
+            <div class="checkline">
+              <input id="consent" name="consent" type="checkbox" required />
+              <div class="ct">
+                <strong>Consent:</strong>
+                I voluntarily submit this story and understand it may be shared with others through the LessonCraft app and related platforms.
+                No personally identifying information will be displayed publicly. I may elect to display my initials only.
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="btnSubmit" class="btn btn-primary" type="submit">Submit story</button>
+              <span class="mini">By submitting, you agree to the consent statement above.</span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card prompt">
+        <div class="hd">
+          <h2>Need help getting started?</h2>
+          <p class="sub">A few prompts that often make stories clearer and more uplifting.</p>
+        </div>
+        <div class="bd">
+          <h3>Prompts</h3>
+          <ul>
+            <li>What was life like before? What changed?</li>
+            <li>Was there a scripture, prayer, person, or moment that helped you?</li>
+            <li>How did God answer in a way you didn’t expect?</li>
+            <li>What did you learn about Jesus Christ through this experience?</li>
+            <li>How has your faith grown since then?</li>
+          </ul>
+
+          <div class="example">
+            <strong>Example (short):</strong> “I prayed for peace during a hard season. I didn’t get an instant solution, but I felt calm and guided day by day…"
+          </div>
+
+          <div class="example" style="background: rgba(26,26,46,0.06); border-color: rgba(26,26,46,0.12);">
+            <strong>Note:</strong> Please avoid sharing phone numbers, street addresses, or other personal details.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      © <span id="year"></span> LessonCraft • Built by TRED Technologies
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://api.aituned.io';
+
+    const $ = (id) => document.getElementById(id);
+
+    const form = $('story-form');
+    const statusBox = $('status');
+    const storyEl = $('story');
+    const wordCountEl = $('wordCount');
+    const nameEl = $('name');
+    const displayInitialsEl = $('displayInitials');
+    const initialsPreviewEl = $('initials-preview');
+
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const panelType = $('panel-type');
+    const panelVoice = $('panel-voice');
+    const panelEmail = $('panel-email');
+
+    // Voice recorder
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlob = null;
+    let recTimer = null;
+    let recStartTs = 0;
+    const btnStart = $('btnStart');
+    const btnStop = $('btnStop');
+    const btnClear = $('btnClear');
+    const recStatus = $('recStatus');
+    const audioEl = $('audio');
+
+    function setStatus(kind, message) {
+      statusBox.className = 'status ' + (kind || '');
+      statusBox.textContent = message;
+      statusBox.style.display = 'block';
+      statusBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function clearStatus() {
+      statusBox.style.display = 'none';
+      statusBox.textContent = '';
+      statusBox.className = 'status';
+    }
+
+    function countWords(text) {
+      const t = (text || '').trim();
+      if (!t) return 0;
+      return t.split(/\s+/).filter(Boolean).length;
+    }
+
+    function computeInitials(name) {
+      const parts = (name || '').trim().split(/\s+/).filter(Boolean);
+      if (parts.length === 0) return '—';
+      if (parts.length === 1) return (parts[0][0] ? parts[0][0].toUpperCase() + '.' : '—');
+      const first = parts[0][0]?.toUpperCase();
+      const last = parts[parts.length - 1][0]?.toUpperCase();
+      if (!first || !last) return '—';
+      return `${first}.${last}.`;
+    }
+
+    function updateWordCount() {
+      const wc = countWords(storyEl.value);
+      wordCountEl.textContent = String(wc);
+      if (wc > 2000) {
+        wordCountEl.parentElement.style.borderColor = 'rgba(176,58,58,0.30)';
+      } else {
+        wordCountEl.parentElement.style.borderColor = 'rgba(26,26,46,0.10)';
+      }
+    }
+
+    function updateInitialsPreview() {
+      initialsPreviewEl.textContent = computeInitials(nameEl.value);
+    }
+
+    function showTab(name) {
+      tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.tab === name ? 'true' : 'false'));
+      panelType.classList.toggle('hidden', name !== 'type');
+      panelVoice.classList.toggle('hidden', name !== 'voice');
+      panelEmail.classList.toggle('hidden', name !== 'email');
+
+      // Type panel always contains the required story field; keep it visible when switching to voice.
+      if (name === 'voice') panelType.classList.remove('hidden');
+
+      // If user chooses email method, disable the form submit button to avoid confusion.
+      const submitBtn = $('btnSubmit');
+      if (name === 'email') {
+        submitBtn.disabled = true;
+      } else {
+        submitBtn.disabled = false;
+      }
+    }
+
+    tabs.forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+
+    storyEl.addEventListener('input', updateWordCount);
+    nameEl.addEventListener('input', updateInitialsPreview);
+    displayInitialsEl.addEventListener('change', updateInitialsPreview);
+
+    updateWordCount();
+    updateInitialsPreview();
+    $('year').textContent = String(new Date().getFullYear());
+
+    async function setupRecorder() {
+      if (!('MediaRecorder' in window) || !navigator.mediaDevices?.getUserMedia) {
+        return { supported: false, reason: 'MediaRecorder not supported in this browser.' };
+      }
+
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : (MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '');
+
+      if (!mimeType) {
+        return { supported: false, reason: 'Audio recording is not supported on this device/browser.' };
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream, { mimeType });
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(audioChunks, { type: mimeType });
+        audioChunks = [];
+        audioEl.src = URL.createObjectURL(audioBlob);
+        audioEl.classList.remove('hidden');
+        btnClear.disabled = false;
+        recStatus.textContent = 'Recording ready (webm)';
+      };
+
+      return { supported: true };
+    }
+
+    async function startRecording() {
+      clearStatus();
+      try {
+        if (!mediaRecorder) {
+          const r = await setupRecorder();
+          if (!r.supported) {
+            setStatus('err', r.reason);
+            return;
+          }
+        }
+
+        audioBlob = null;
+        audioEl.classList.add('hidden');
+        audioEl.removeAttribute('src');
+        btnClear.disabled = true;
+
+        mediaRecorder.start();
+        btnStart.disabled = true;
+        btnStop.disabled = false;
+
+        recStartTs = Date.now();
+        recStatus.textContent = 'Recording… 0:00';
+
+        recTimer = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - recStartTs) / 1000);
+          const m = Math.floor(elapsed / 60);
+          const s = String(elapsed % 60).padStart(2, '0');
+          recStatus.textContent = `Recording… ${m}:${s}`;
+          if (elapsed >= 180) stopRecording();
+        }, 250);
+      } catch (e) {
+        setStatus('err', 'Could not start recording. Please check microphone permission.');
+      }
+    }
+
+    function stopRecording() {
+      if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
+      mediaRecorder.stop();
+      btnStart.disabled = false;
+      btnStop.disabled = true;
+      if (recTimer) clearInterval(recTimer);
+      recTimer = null;
+      recStatus.textContent = 'Processing…';
+    }
+
+    function clearRecording() {
+      audioBlob = null;
+      audioChunks = [];
+      audioEl.classList.add('hidden');
+      audioEl.removeAttribute('src');
+      btnClear.disabled = true;
+      recStatus.textContent = 'Not recording';
+    }
+
+    btnStart.addEventListener('click', startRecording);
+    btnStop.addEventListener('click', stopRecording);
+    btnClear.addEventListener('click', clearRecording);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearStatus();
+
+      const payload = {
+        name: $('name').value.trim(),
+        email: $('email').value.trim(),
+        location: $('location').value.trim(),
+        ageConfirmed: $('ageConfirmed').checked,
+        consent: $('consent').checked,
+        story: $('story').value.trim(),
+        category: $('category').value,
+        displayInitials: $('displayInitials').checked,
+        faithTradition: $('faithTradition').value.trim() || null,
+        hasAudio: !!audioBlob,
+      };
+
+      // Client-side guardrails
+      const wc = countWords(payload.story);
+      if (wc > 2000) {
+        setStatus('err', 'Your story is over 2000 words. Please shorten it and try again.');
+        return;
+      }
+
+      $('btnSubmit').disabled = true;
+      try {
+        let res;
+        if (audioBlob) {
+          const fd = new FormData();
+          Object.entries(payload).forEach(([k, v]) => {
+            if (v === null || v === undefined) return;
+            fd.append(k, String(v));
+          });
+          fd.append('audio', new File([audioBlob], 'story.webm', { type: audioBlob.type || 'audio/webm' }));
+
+          res = await fetch(`${API_BASE}/api/stories/submit`, { method: 'POST', body: fd });
+        } else {
+          res = await fetch(`${API_BASE}/api/stories/submit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        }
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const msg = data?.error || data?.message || 'Submission failed. Please try again.';
+          setStatus('err', msg);
+          return;
+        }
+
+        setStatus('ok', `Thank you. Your story was received and is pending review. Reference ID: ${data.storyId}`);
+        form.reset();
+        clearRecording();
+        updateWordCount();
+        updateInitialsPreview();
+        showTab('type');
+      } catch (err) {
+        setStatus('err', 'Network error. Please try again in a moment.');
+      } finally {
+        $('btnSubmit').disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

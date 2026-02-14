@@ -1,3 +1,0 @@
-# LessonCraft audio player routing
-/listen/* /lessoncraft/listen/index.html 200
-/listen /lessoncraft/listen/index.html 200
