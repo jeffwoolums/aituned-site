@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">LessonCraft Audio Player</title>
+    
+    <!-- Meta tags (will be updated by JavaScript) -->
+    <meta property="og:title" content="LessonCraft Audio Player" id="og-title">
+    <meta property="og:description" content="Listen to inspiring spiritual content on the web" id="og-description">
+    <meta property="og:image" content="https://api.aituned.io/api/artwork/default.jpg" id="og-image">
+    <meta property="og:url" content="https://aituned.io/listen/" id="og-url">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LessonCraft">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LessonCraft Audio Player" id="twitter-title">
+    <meta name="twitter:description" content="Listen to inspiring spiritual content on the web" id="twitter-description">
+    <meta name="twitter:image" content="https://api.aituned.io/api/artwork/default.jpg" id="twitter-image">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cream-bg: #FDF8F0;
+            --navy-text: #1B2A4A;
+            --gold-accent: #B8860B;
+            --light-gold: #D4AF37;
+            --gray-text: #5A5A5A;
+            --border-color: #E5E5E5;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--cream-bg);
+            color: var(--navy-text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--gold-accent);
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            color: var(--light-gold);
+        }
+
+        .tagline {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        .player-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .episode-artwork {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--gold-accent), var(--light-gold));
+        }
+
+        .episode-content {
+            padding: 30px;
+        }
+
+        .episode-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--navy-text);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .episode-series {
+            color: var(--gold-accent);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .scripture-section {
+            background: linear-gradient(135deg, #F8F4E6, #F5F0E3);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--gold-accent);
+        }
+
+        .scripture-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy-text);
+            margin-bottom: 8px;
+        }
+
+        .scripture-reference {
+            color: var(--gold-accent);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .scripture-text {
+            font-style: italic;
+            color: var(--navy-text);
+            line-height: 1.5;
+        }
+
+        .reflection-section {
+            background: rgba(184, 134, 11, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(184, 134, 11, 0.2);
+        }
+
+        .reflection-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy-text);
+            margin-bottom: 10px;
+        }
+
+        .reflection-text {
+            color: var(--navy-text);
+            line-height: 1.5;
+        }
+
+        .audio-section {
+            margin-bottom: 20px;
+        }
+
+        .audio-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--navy-text);
+            margin-bottom: 15px;
+        }
+
+        .main-audio-player {
+            width: 100%;
+            height: 50px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .main-audio-player::-webkit-media-controls-panel {
+            background-color: var(--white);
+        }
+
+        .segments-list {
+            list-style: none;
+        }
+
+        .segment-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .segment-item:last-child {
+            border-bottom: none;
+        }
+
+        .segment-play-btn {
+            background: var(--gold-accent);
+            color: var(--white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .segment-play-btn:hover {
+            background: var(--light-gold);
+        }
+
+        .segment-title {
+            font-weight: 500;
+            color: var(--navy-text);
+        }
+
+        .narration-section {
+            margin-top: 25px;
+        }
+
+        .narration-toggle {
+            background: transparent;
+            border: 1px solid var(--gold-accent);
+            color: var(--gold-accent);
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .narration-toggle:hover {
+            background: var(--gold-accent);
+            color: var(--white);
+        }
+
+        .narration-content {
+            display: none;
+            padding: 20px;
+            background: rgba(27, 42, 74, 0.02);
+            border-radius: 0 0 6px 6px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .narration-content.expanded {
+            display: block;
+        }
+
+        .narration-text {
+            line-height: 1.6;
+            color: var(--navy-text);
+        }
+
+        .app-download {
+            text-align: center;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .download-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--navy-text);
+            margin-bottom: 10px;
+        }
+
+        .download-subtitle {
+            color: var(--gray-text);
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            background: var(--navy-text);
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #2A3E5A;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 60px 30px;
+            color: var(--gray-text);
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 60px 30px;
+            color: var(--gray-text);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 20px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--gold-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .episode-title {
+                font-size: 1.5rem;
+            }
+
+            .episode-content {
+                padding: 20px;
+            }
+
+            .scripture-section,
+            .reflection-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="logo">LessonCraft</a>
+            <p class="tagline">Inspiring spiritual content for your daily journey</p>
+        </div>
+
+        <div id="loading" class="loading-message">
+            <div class="loading-spinner"></div>
+            <p>Loading audio content...</p>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;">
+            <h2>Content Not Found</h2>
+            <p>We couldn't find the audio content you're looking for. Please check the link and try again.</p>
+        </div>
+
+        <div id="player" style="display: none;">
+            <!-- Player content will be inserted here -->
+        </div>
+
+        <div class="app-download">
+            <h3 class="download-title">Get LessonCraft</h3>
+            <p class="download-subtitle">Download the full app for the complete experience</p>
+            <a href="https://apps.apple.com/app/lessoncraft/id1234567890" class="download-btn">
+                📱 Download on App Store
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Extract episode ID from URL path
+        function getEpisodeId() {
+            const path = window.location.pathname;
+            const match = path.match(/\/listen\/(.+)/);
+            return match ? match[1] : null;
+        }
+
+        // Resolve audio URL
+        function resolveAudioUrl(audioUrl) {
+            if (audioUrl.startsWith('http')) {
+                return audioUrl;
+            }
+            return `https://api.aituned.io/api/audio/${audioUrl}`;
+        }
+
+        // Update meta tags
+        function updateMetaTags(episode, series) {
+            const title = `${episode.title} | LessonCraft`;
+            const description = episode.description || 
+                              episode.reflectionPrompt || 
+                              series?.description || 
+                              'Listen to inspiring spiritual content';
+            const imageUrl = episode.artwork ? 
+                           `https://api.aituned.io/api/artwork/${episode.artwork}` : 
+                           'https://api.aituned.io/api/artwork/lessoncraft-default.jpg';
+            const url = window.location.href;
+
+            document.getElementById('page-title').textContent = title;
+            document.getElementById('og-title').setAttribute('content', title);
+            document.getElementById('og-description').setAttribute('content', description);
+            document.getElementById('og-image').setAttribute('content', imageUrl);
+            document.getElementById('og-url').setAttribute('content', url);
+            document.getElementById('twitter-title').setAttribute('content', title);
+            document.getElementById('twitter-description').setAttribute('content', description);
+            document.getElementById('twitter-image').setAttribute('content', imageUrl);
+        }
+
+        // Find episode in catalog
+        function findEpisode(catalog, episodeId) {
+            for (const series of catalog.series) {
+                for (const episode of series.episodes) {
+                    if (episode.id === episodeId) {
+                        return { episode, series };
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Create player HTML
+        function createPlayerHTML(episode, series) {
+            const artworkUrl = episode.artwork ? 
+                             `https://api.aituned.io/api/artwork/${episode.artwork}` : 
+                             `https://api.aituned.io/api/artwork/lessoncraft-default.jpg`;
+            
+            let playerHTML = `
+                <div class="player-card">
+                    <img src="${artworkUrl}" alt="${episode.title}" class="episode-artwork" onerror="this.style.display='none'">
+                    <div class="episode-content">
+                        <div class="episode-series">${series.title}</div>
+                        <h1 class="episode-title">${episode.title}</h1>
+            `;
+
+            // Scripture of the day
+            if (episode.scriptureOfTheDay) {
+                playerHTML += `
+                    <div class="scripture-section">
+                        <div class="scripture-title">Scripture of the Day</div>
+                        <div class="scripture-reference">${episode.scriptureOfTheDay.reference}</div>
+                        <div class="scripture-text">${episode.scriptureOfTheDay.text}</div>
+                    </div>
+                `;
+            }
+
+            // Reflection prompt
+            if (episode.reflectionPrompt) {
+                playerHTML += `
+                    <div class="reflection-section">
+                        <div class="reflection-title">Today's Reflection</div>
+                        <div class="reflection-text">${episode.reflectionPrompt}</div>
+                    </div>
+                `;
+            }
+
+            // Audio player section
+            playerHTML += `<div class="audio-section">`;
+            
+            if (episode.segments && episode.segments.length > 1) {
+                // Multi-segment episode
+                playerHTML += `
+                    <div class="audio-title">Audio Segments</div>
+                    <ul class="segments-list">
+                `;
+                
+                episode.segments.forEach((segment, index) => {
+                    const audioUrl = resolveAudioUrl(segment.audioUrl);
+                    playerHTML += `
+                        <li class="segment-item">
+                            <button class="segment-play-btn" onclick="playSegment('${audioUrl}', ${index})">▶</button>
+                            <div class="segment-title">${segment.title}</div>
+                        </li>
+                    `;
+                });
+                
+                playerHTML += `</ul>`;
+            } else if (episode.segments && episode.segments.length === 1) {
+                // Single segment episode
+                const audioUrl = resolveAudioUrl(episode.segments[0].audioUrl);
+                playerHTML += `
+                    <div class="audio-title">Listen</div>
+                    <audio controls class="main-audio-player">
+                        <source src="${audioUrl}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                `;
+            }
+
+            playerHTML += `</div>`;
+
+            // Narration text (expandable)
+            const firstSegment = episode.segments?.[0];
+            if (firstSegment && firstSegment.narrationText) {
+                playerHTML += `
+                    <div class="narration-section">
+                        <button class="narration-toggle" onclick="toggleNarration()">
+                            <span>Read Full Content</span>
+                            <span>▼</span>
+                        </button>
+                        <div class="narration-content" id="narration-content">
+                            <div class="narration-text">${firstSegment.narrationText}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            playerHTML += `
+                    </div>
+                </div>
+            `;
+
+            return playerHTML;
+        }
+
+        // Player functions
+        let currentAudio = null;
+
+        function playSegment(audioUrl, index) {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            currentAudio = new Audio(audioUrl);
+            currentAudio.play().catch(e => console.error('Error playing audio:', e));
+
+            // Update button states
+            document.querySelectorAll('.segment-play-btn').forEach((btn, i) => {
+                btn.textContent = i === index ? '⏸' : '▶';
+            });
+
+            currentAudio.onended = () => {
+                document.querySelectorAll('.segment-play-btn').forEach(btn => {
+                    btn.textContent = '▶';
+                });
+            };
+        }
+
+        function toggleNarration() {
+            const content = document.getElementById('narration-content');
+            const isExpanded = content.classList.contains('expanded');
+            
+            if (isExpanded) {
+                content.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+            }
+            
+            const toggle = document.querySelector('.narration-toggle span:last-child');
+            toggle.textContent = isExpanded ? '▼' : '▲';
+        }
+
+        // Main initialization
+        async function init() {
+            const episodeId = getEpisodeId();
+            
+            if (!episodeId) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://api.aituned.io/api/catalog');
+                if (!response.ok) throw new Error('Failed to fetch catalog');
+                
+                const catalog = await response.json();
+                const result = findEpisode(catalog, episodeId);
+                
+                if (!result) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    return;
+                }
+
+                const { episode, series } = result;
+                
+                // Update meta tags
+                updateMetaTags(episode, series);
+                
+                // Create and show player
+                const playerHTML = createPlayerHTML(episode, series);
+                document.getElementById('player').innerHTML = playerHTML;
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('player').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading episode:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

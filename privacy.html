@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="LessonCraft Privacy Policy (TRED Technologies LLC)." />
+  <title>Privacy Policy | LessonCraft</title>
+  <style>
+    :root {
+      --bg: #070c16;
+      --bg-soft: #0d1628;
+      --panel: rgba(13, 22, 40, 0.86);
+      --line: rgba(118, 155, 232, 0.22);
+      --text: #e7eefc;
+      --muted: #a7b6d9;
+      --blue: #3a8cff;
+      --teal: #49d7d0;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+      --radius: 16px;
+      --max: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 85% -10%, rgba(58, 140, 255, 0.22), transparent 52%),
+        radial-gradient(900px 600px at -10% 15%, rgba(73, 215, 208, 0.12), transparent 55%),
+        linear-gradient(180deg, #060a14 0%, #070c16 38%, #091124 100%);
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black 28%, transparent 80%);
+      opacity: 0.15;
+      z-index: -1;
+    }
+
+    a { color: #a6d7ff; }
+    a:hover { color: #d6efff; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(7, 12, 22, 0.74);
+      border-bottom: 1px solid rgba(149, 179, 248, 0.16);
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 2.25rem));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.95rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, rgba(93, 179, 255, 0.95), rgba(58, 140, 255, 0.9) 45%, rgba(73, 215, 208, 0.85));
+      box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.18), 0 10px 24px rgba(58, 140, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(6, 10, 20, 0.65);
+    }
+
+    .brand-mark::before { width: 24px; height: 5px; left: 5px; top: 9px; transform: rotate(-20deg); }
+    .brand-mark::after { width: 20px; height: 5px; right: 5px; bottom: 9px; transform: rotate(-20deg); }
+
+    .brand-text b { display: block; font-size: 1rem; letter-spacing: 0.01em; }
+    .brand-text span { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+
+    .top-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(93, 179, 255, 0.25);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      padding: 0.5rem 0.75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .pill:hover { color: var(--text); border-color: rgba(93, 179, 255, 0.42); }
+
+    main { padding: 2.4rem 0 4rem; }
+
+    .hero {
+      padding: 1.2rem 0 1.4rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.9rem, 2.3vw, 2.4rem);
+      letter-spacing: -0.02em;
+    }
+
+    .meta {
+      margin-top: 0.85rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .card {
+      margin-top: 1.25rem;
+      background: var(--panel);
+      border: 1px solid rgba(149, 179, 248, 0.16);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-inner { padding: 1.35rem 1.35rem; }
+
+    h2 {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+    }
+
+    h2:first-child { margin-top: 0; }
+
+    p, li {
+      color: rgba(231, 238, 252, 0.92);
+    }
+
+    ul { padding-left: 1.25rem; }
+
+    .callout {
+      margin: 1.15rem 0;
+      border-left: 3px solid rgba(73, 215, 208, 0.7);
+      padding: 0.9rem 0.95rem;
+      background: rgba(73, 215, 208, 0.06);
+      border-radius: 12px;
+    }
+
+    .callout b { color: #dffbf8; }
+
+    .footer {
+      margin-top: 1.25rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.92em;
+      padding: 0.1rem 0.35rem;
+      border: 1px solid rgba(149, 179, 248, 0.2);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      color: rgba(231, 238, 252, 0.95);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner { flex-direction: column; align-items: flex-start; }
+      .top-links { width: 100%; justify-content: flex-start; }
+      .card-inner { padding: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <a class="brand" href="/" aria-label="AI Tuned home">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div class="brand-text">
+            <b>LessonCraft</b>
+            <span>Privacy Policy</span>
+          </div>
+        </a>
+        <nav class="top-links" aria-label="Top links">
+          <a class="pill" href="/lessoncraft">LessonCraft</a>
+          <a class="pill" href="mailto:support@tredtechnologies.com">Support</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="hero" aria-label="Privacy policy heading">
+        <h1>Privacy Policy</h1>
+        <div class="meta">
+          <div><b>App:</b> LessonCraft</div>
+          <div><b>Company:</b> TRED Technologies LLC</div>
+          <div><b>Effective date:</b> February 14, 2026</div>
+        </div>
+      </section>
+
+      <section class="card" aria-label="Privacy policy content">
+        <div class="card-inner">
+          <div class="callout">
+            <b>Plain-language summary:</b> LessonCraft is designed to help you prepare lessons. We do not sell your data. We do not run third‑party ad tracking. Your lesson content is used only to provide the app’s features.
+          </div>
+
+          <h2>1) Who we are</h2>
+          <p>
+            LessonCraft is operated by <b>TRED Technologies LLC</b> (“TRED”, “we”, “us”).
+            If you have questions about this policy, contact us at
+            <a href="mailto:support@tredtechnologies.com">support@tredtechnologies.com</a>.
+          </p>
+
+          <h2>2) What information we collect</h2>
+          <p>We collect only the information needed to run LessonCraft:</p>
+          <ul>
+            <li>
+              <b>Lesson content you provide</b> (for example: prompts, lesson topics, drafts, and related text).
+              This content is used to generate lesson materials and coaching responses.
+            </li>
+            <li>
+              <b>Basic technical data</b> needed for service reliability and security (for example: request timestamps,
+              error logs, and limited device/app identifiers used for authentication).
+            </li>
+            <li>
+              <b>Support communications</b> if you email us (for example: your email address and the information you include
+              in your message).
+            </li>
+            <li>
+              <b>Subscription and purchase status</b> (if you choose a Pro subscription). Payments are processed by Apple
+              (App Store / In‑App Purchases). We do not receive your full payment details.
+            </li>
+          </ul>
+          <p>
+            <b>No advertising tracking:</b> LessonCraft does not use third‑party advertising SDKs and does not track you across
+            other apps or websites.
+          </p>
+          <p>
+            <b>No identity linking for AI chat:</b> AI lesson conversations are not designed to be linked to your real‑world identity.
+            We do not request your name, address, or government identifiers to use the core lesson features.
+          </p>
+
+          <h2>3) How we use information</h2>
+          <ul>
+            <li>To provide LessonCraft features (lesson preparation, teaching coach guidance, and related tools).</li>
+            <li>To improve reliability and prevent abuse (security monitoring, rate limiting, and debugging).</li>
+            <li>To respond to support requests.</li>
+          </ul>
+
+          <h2>4) How AI processing works</h2>
+          <p>
+            When you ask LessonCraft to generate or refine content, we may send the text you provide to AI service providers
+            to produce a response. We aim to minimize personal information in these requests.
+          </p>
+          <p>
+            Tip: you can avoid sharing sensitive personal details in lesson prompts. If you include sensitive information,
+            it may be processed by our AI providers to generate your requested output.
+          </p>
+
+          <h2>5) Data sharing</h2>
+          <p>
+            We do <b>not</b> sell your personal information.
+            We do <b>not</b> share your information with third parties for their own marketing.
+          </p>
+          <p>
+            We may share limited information only when necessary to operate the app, such as with:
+          </p>
+          <ul>
+            <li>Cloud infrastructure providers (to host and deliver the service).</li>
+            <li>AI processing providers (to generate the content you request).</li>
+            <li>Apple (for purchases/subscriptions, managed through the App Store).</li>
+            <li>Legal/authorities if required by law or to protect safety and prevent fraud.</li>
+          </ul>
+
+          <h2>6) Data retention</h2>
+          <p>
+            We retain information only as long as necessary to provide the service, comply with legal obligations,
+            and resolve disputes. We may delete or anonymize data when it is no longer needed.
+          </p>
+
+          <h2>7) Security</h2>
+          <p>
+            We use reasonable technical and organizational measures to protect your information.
+            No method of transmission or storage is 100% secure; we cannot guarantee absolute security.
+          </p>
+
+          <h2>8) Children’s privacy</h2>
+          <p>
+            LessonCraft is not directed to children under 13. If you believe a child has provided us personal information,
+            please contact us and we will work to delete it.
+          </p>
+
+          <h2>9) Your choices</h2>
+          <ul>
+            <li>You may choose what content to enter into LessonCraft.</li>
+            <li>You can contact us to request help or ask questions about data handling.</li>
+          </ul>
+
+          <h2>10) Changes to this policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time. We will update the “Effective date” above when changes are made.
+          </p>
+
+          <div class="footer">
+            Questions? Email <a href="mailto:support@tredtechnologies.com">support@tredtechnologies.com</a>.
+          </div>
+        </div>
+      </section>
+
+      <p class="footer" style="margin-top: 1.2rem;">
+        Shortcut URLs: <span class="kbd">/privacy</span> and <span class="kbd">/lessoncraft/privacypolicy</span>
+      </p>
+    </div>
+  </main>
+</body>
+</html>
