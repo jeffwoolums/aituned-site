@@ -211,6 +211,28 @@
     font-weight: 600;
   }
 
+  .bulk-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 8px 16px;
+    background: rgba(201, 168, 76, 0.1);
+    border-radius: 8px;
+    border: 1px solid var(--gold);
+  }
+  .btn-bulk {
+    background: var(--gray);
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  #selected-count {
+    font-size: 12px;
+    color: var(--gray);
+    font-weight: 600;
+  }
+
   /* Story list */
   .story-list {
     padding: 0 24px 24px;
@@ -229,6 +251,15 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    cursor: pointer;
+  }
+  .story-checkbox {
+    margin: 0;
+    cursor: pointer;
+  }
+  .story-checkbox input {
+    width: 16px;
+    height: 16px;
     cursor: pointer;
   }
   .story-status {
@@ -458,7 +489,7 @@
   </div>
   <div class="filters">
     <label for="filter-category">Category:</label>
-    <select id="filter-category" onchange="loadStories()">
+    <select id="filter-category" onchange="applyFilters()">
       <option value="">All Categories</option>
     </select>
     
@@ -467,6 +498,14 @@
       <option value="newest">Newest First</option>
       <option value="oldest">Oldest First</option>
     </select>
+  </div>
+  
+  <div class="bulk-actions" id="bulk-actions" style="display: none;">
+    <button class="btn btn-bulk" onclick="selectAll()">Select All</button>
+    <button class="btn btn-bulk" onclick="selectNone()">Select None</button>
+    <button class="btn btn-approve" onclick="bulkModerate('approve')">Bulk Approve</button>
+    <button class="btn btn-reject" onclick="bulkModerate('reject')">Bulk Reject</button>
+    <span id="selected-count">0 selected</span>
   </div>
 </div>
 
@@ -483,6 +522,7 @@ let isAuthenticated = false;
 let currentStatusFilter = 'all';
 let allStories = [];
 let filteredStories = [];
+let selectedStories = new Set();
 let searchTimeout = null;
 let categories = new Set();
 
@@ -648,10 +688,19 @@ function renderStories() {
   
   if (filteredStories.length === 0) {
     listEl.innerHTML = '<div class="empty-state">No stories match the current filters</div>';
+    selectedStories.clear();
+    updateSelectionUI();
     return;
   }
   
   listEl.innerHTML = filteredStories.map(story => renderStoryCard(story)).join('');
+  
+  // Restore checkbox states
+  selectedStories.forEach(storyId => {
+    const checkbox = document.getElementById(`check-${storyId}`);
+    if (checkbox) checkbox.checked = true;
+  });
+  updateSelectionUI();
 }
 
 function renderStoryCard(story) {
@@ -668,9 +717,12 @@ function renderStoryCard(story) {
 
   return `
     <div class="story-card" id="card-${story.id || story.storyId}">
-      <div class="story-header" onclick="toggleCard('${story.id || story.storyId}')">
+      <div class="story-header">
+        <div class="story-checkbox" onclick="event.stopPropagation()">
+          <input type="checkbox" id="check-${story.id || story.storyId}" onchange="toggleSelection('${story.id || story.storyId}')">
+        </div>
         <span class="story-status ${story.status}">${story.status}</span>
-        <div class="story-meta">
+        <div class="story-meta" onclick="toggleCard('${story.id || story.storyId}')">
           ${title ? `<div class="story-title">${escapeHtml(title)}</div>` : ''}
           <div class="story-preview">${escapeHtml(preview)}${preview.length >= 100 ? '...' : ''}</div>
           <div class="story-info">
@@ -682,7 +734,7 @@ function renderStoryCard(story) {
           </div>
         </div>
         <span class="story-category">${category}</span>
-        <span class="story-toggle">▾</span>
+        <span class="story-toggle" onclick="toggleCard('${story.id || story.storyId}')">▾</span>
       </div>
       <div class="story-detail" id="detail-${story.id || story.storyId}">
         ${renderStoryDetail(story)}
@@ -751,11 +803,11 @@ function handleSearch() {
 }
 
 // ── Moderate ──
-async function moderate(storyId, action) {
+async function moderate(storyId, action, silent = false) {
   if (!isAuthenticated) return;
   
   const card = document.getElementById(`card-${storyId}`);
-  const buttons = card.querySelectorAll('.btn');
+  const buttons = card ? card.querySelectorAll('.btn') : [];
   
   // Disable buttons during request
   buttons.forEach(btn => btn.disabled = true);
@@ -772,7 +824,7 @@ async function moderate(storyId, action) {
 
     if (data.success || res.ok) {
       const newStatus = action === 'approve' ? 'approved' : 'rejected';
-      showToast(`Story ${newStatus}!`, 'success');
+      if (!silent) showToast(`Story ${newStatus}!`, 'success');
       
       // Update story in cache
       const storyIndex = allStories.findIndex(s => (s.id || s.storyId) == storyId);
@@ -780,16 +832,20 @@ async function moderate(storyId, action) {
         allStories[storyIndex].status = newStatus;
       }
       
-      // Update UI
-      const badge = card.querySelector('.story-status');
-      if (badge) {
-        badge.className = `story-status ${newStatus}`;
-        badge.textContent = newStatus;
+      // Update UI only if card exists (not in bulk mode)
+      if (card) {
+        const badge = card.querySelector('.story-status');
+        if (badge) {
+          badge.className = `story-status ${newStatus}`;
+          badge.textContent = newStatus;
+        }
+        
+        // Update button states
+        const approveBtn = card.querySelector('.btn-approve');
+        const rejectBtn = card.querySelector('.btn-reject');
+        if (approveBtn) approveBtn.disabled = newStatus === 'approved';
+        if (rejectBtn) rejectBtn.disabled = newStatus === 'rejected';
       }
-      
-      // Update button states
-      card.querySelector('.btn-approve').disabled = newStatus === 'approved';
-      card.querySelector('.btn-reject').disabled = newStatus === 'rejected';
       
       // Refresh stats
       updateStats();
@@ -798,8 +854,9 @@ async function moderate(storyId, action) {
     }
   } catch (err) {
     console.error('Moderation error:', err);
-    showToast('Error: ' + err.message, 'error');
+    if (!silent) showToast('Error: ' + err.message, 'error');
     buttons.forEach(btn => btn.disabled = false);
+    throw err; // Re-throw for bulk operation handling
   }
 }
 
@@ -831,6 +888,93 @@ function showToast(msg, type) {
   t.textContent = msg;
   t.className = `toast ${type} show`;
   setTimeout(() => { t.classList.remove('show'); }, 3000);
+}
+
+// ── Bulk Actions ──
+function toggleSelection(storyId) {
+  const checkbox = document.getElementById(`check-${storyId}`);
+  if (checkbox.checked) {
+    selectedStories.add(storyId);
+  } else {
+    selectedStories.delete(storyId);
+  }
+  updateSelectionUI();
+}
+
+function updateSelectionUI() {
+  const count = selectedStories.size;
+  document.getElementById('selected-count').textContent = `${count} selected`;
+  document.getElementById('bulk-actions').style.display = count > 0 ? 'flex' : 'none';
+}
+
+function selectAll() {
+  selectedStories.clear();
+  filteredStories.forEach(story => {
+    const storyId = story.id || story.storyId;
+    selectedStories.add(storyId);
+    const checkbox = document.getElementById(`check-${storyId}`);
+    if (checkbox) checkbox.checked = true;
+  });
+  updateSelectionUI();
+}
+
+function selectNone() {
+  selectedStories.clear();
+  document.querySelectorAll('.story-checkbox input').forEach(cb => cb.checked = false);
+  updateSelectionUI();
+}
+
+async function bulkModerate(action) {
+  if (selectedStories.size === 0) {
+    showToast('No stories selected', 'error');
+    return;
+  }
+
+  const confirmMsg = `${action === 'approve' ? 'Approve' : 'Reject'} ${selectedStories.size} stories?`;
+  if (!confirm(confirmMsg)) return;
+
+  // Disable bulk action buttons
+  document.querySelectorAll('.bulk-actions button').forEach(btn => btn.disabled = true);
+  
+  const storyIds = Array.from(selectedStories);
+  let completed = 0;
+  let failed = 0;
+  
+  // Update progress
+  const updateProgress = () => {
+    document.getElementById('selected-count').textContent = 
+      `Processing... ${completed + failed}/${storyIds.length}`;
+  };
+  
+  try {
+    const promises = storyIds.map(async storyId => {
+      try {
+        await moderate(storyId, action, true);
+        completed++;
+      } catch (err) {
+        failed++;
+        console.error(`Failed to moderate ${storyId}:`, err);
+      }
+      updateProgress();
+    });
+    
+    await Promise.all(promises);
+    
+    if (failed === 0) {
+      showToast(`Successfully ${action}d ${completed} stories!`, 'success');
+    } else if (completed > 0) {
+      showToast(`${completed} stories ${action}d, ${failed} failed`, 'error');
+    } else {
+      showToast(`All ${failed} operations failed`, 'error');
+    }
+    
+    selectNone();
+    setTimeout(() => loadStories(), 1000);
+    
+  } finally {
+    // Re-enable bulk action buttons
+    document.querySelectorAll('.bulk-actions button').forEach(btn => btn.disabled = false);
+  }
 }
 </script>
 </body>
