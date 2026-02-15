@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stories Admin — LessonCraft</title>
+<style>
+  :root {
+    --navy: #1a1a2e;
+    --gold: #c9a84c;
+    --cream: #f5f0e8;
+    --green: #2d6a4f;
+    --red: #c0392b;
+    --orange: #e67e22;
+    --gray: #6c757d;
+    --light: #f8f9fa;
+    --border: #dee2e6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--light);
+    color: var(--navy);
+    line-height: 1.5;
+  }
+
+  /* Auth overlay */
+  #auth-overlay {
+    position: fixed; inset: 0;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+  }
+  #auth-overlay.hidden { display: none; }
+  .auth-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    width: 380px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .auth-card h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--navy);
+  }
+  .auth-card p {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 24px;
+  }
+  .auth-card input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .auth-card input:focus { border-color: var(--gold); }
+  .auth-card .auth-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 8px;
+    min-height: 20px;
+  }
+  .auth-card button {
+    margin-top: 16px;
+    width: 100%;
+    padding: 12px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .auth-card button:hover { opacity: 0.9; }
+
+  /* Header */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  header h1 span { color: var(--gold); }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-actions button {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .header-actions button:hover { background: rgba(255,255,255,0.25); }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    padding: 16px 24px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: var(--light);
+    min-width: 120px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .stat-card:hover { border-color: var(--gold); }
+  .stat-card.active { border-color: var(--gold); background: #faf6eb; }
+  .stat-card .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .stat-card .stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray);
+    font-weight: 600;
+  }
+  .stat-card.pending .stat-num { color: var(--orange); }
+  .stat-card.approved .stat-num { color: var(--green); }
+  .stat-card.rejected .stat-num { color: var(--red); }
+
+  /* Filters */
+  .filters {
+    padding: 12px 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filters select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+  }
+  .filters label {
+    font-size: 13px;
+    color: var(--gray);
+    font-weight: 600;
+  }
+
+  /* Story list */
+  .story-list {
+    padding: 0 24px 24px;
+  }
+  .story-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .story-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .story-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+  }
+  .story-status {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .story-status.pending { background: #fff3cd; color: #856404; }
+  .story-status.approved { background: #d4edda; color: #155724; }
+  .story-status.rejected { background: #f8d7da; color: #721c24; }
+
+  .story-meta {
+    flex: 1;
+    min-width: 0;
+  }
+  .story-meta .story-preview {
+    font-size: 14px;
+    color: #444;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .story-meta .story-info {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 2px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .story-meta .story-info span { white-space: nowrap; }
+  .story-category {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #e8e3f3;
+    color: #5a3d8a;
+    white-space: nowrap;
+  }
+  .story-toggle {
+    color: var(--gray);
+    font-size: 18px;
+    transition: transform 0.2s;
+  }
+  .story-card.expanded .story-toggle { transform: rotate(180deg); }
+
+  /* Story detail (expanded) */
+  .story-detail {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .story-card.expanded .story-detail { display: block; }
+
+  .story-full-text {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 16px 0;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .detail-item {
+    font-size: 13px;
+  }
+  .detail-item .label {
+    font-weight: 600;
+    color: var(--gray);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .detail-item .value {
+    color: var(--navy);
+    margin-top: 2px;
+  }
+
+  .mod-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .mod-actions textarea {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 36px;
+    max-height: 100px;
+    font-family: inherit;
+  }
+  .btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-approve { background: var(--green); color: white; }
+  .btn-reject { background: var(--red); color: white; }
+
+  /* Loading / empty */
+  .loading, .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+  }
+  .loading::after {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 12px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    z-index: 200;
+    max-width: 400px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    header h1 { font-size: 16px; }
+    .stats-bar { gap: 8px; padding: 12px 16px; }
+    .stat-card { padding: 8px 14px; min-width: 80px; }
+    .stat-card .stat-num { font-size: 22px; }
+    .story-list { padding: 0 12px 12px; }
+    .story-header { padding: 12px 14px; gap: 10px; }
+    .filters { padding: 10px 12px; }
+    .detail-grid { grid-template-columns: 1fr 1fr; }
+    .mod-actions { flex-wrap: wrap; }
+    .mod-actions textarea { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Auth overlay -->
+<div id="auth-overlay">
+  <div class="auth-card">
+    <h1>🔐 Stories Admin</h1>
+    <p>Enter admin key to access the moderation dashboard</p>
+    <input type="password" id="auth-key" placeholder="Admin Key" autocomplete="off">
+    <div class="auth-error" id="auth-error"></div>
+    <button onclick="authenticate()">Sign In</button>
+  </div>
+</div>
+
+<!-- Main app -->
+<header>
+  <h1><span>LessonCraft</span> Stories Admin</h1>
+  <div class="header-actions">
+    <button onclick="loadStories()" title="Refresh">↻ Refresh</button>
+    <button onclick="logout()">Sign Out</button>
+  </div>
+</header>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-card active" data-filter="all" onclick="filterByStatus('all', this)">
+    <div class="stat-num" id="stat-total">—</div>
+    <div class="stat-label">Total</div>
+  </div>
+  <div class="stat-card pending" data-filter="pending" onclick="filterByStatus('pending', this)">
+    <div class="stat-num" id="stat-pending">—</div>
+    <div class="stat-label">Pending</div>
+  </div>
+  <div class="stat-card approved" data-filter="approved" onclick="filterByStatus('approved', this)">
+    <div class="stat-num" id="stat-approved">—</div>
+    <div class="stat-label">Approved</div>
+  </div>
+  <div class="stat-card rejected" data-filter="rejected" onclick="filterByStatus('rejected', this)">
+    <div class="stat-num" id="stat-rejected">—</div>
+    <div class="stat-label">Rejected</div>
+  </div>
+</div>
+
+<div class="filters">
+  <label for="filter-category">Category:</label>
+  <select id="filter-category" onchange="loadStories()">
+    <option value="all">All Categories</option>
+    <option value="testimony">Testimony</option>
+    <option value="faith_journey">Faith Journey</option>
+    <option value="prayer_answer">Prayer Answer</option>
+    <option value="conversion">Conversion</option>
+    <option value="miracle">Miracle</option>
+    <option value="other">Other</option>
+  </select>
+</div>
+
+<div class="story-list" id="story-list">
+  <div class="loading" id="loading">Loading stories</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE = 'https://api.aituned.io';
+let adminKey = '';
+let currentStatusFilter = 'all';
+let storiesCache = [];
+
+// ── Auth ──
+function authenticate() {
+  const key = document.getElementById('auth-key').value.trim();
+  if (!key) {
+    document.getElementById('auth-error').textContent = 'Please enter the admin key';
+    return;
+  }
+  adminKey = key;
+  // Test the key with a list request
+  fetch(`${API_BASE}/api/admin/stories?limit=1`, {
+    headers: { 'X-Admin-Key': adminKey }
+  }).then(r => {
+    if (r.status === 401) {
+      document.getElementById('auth-error').textContent = 'Invalid admin key';
+      adminKey = '';
+      return;
+    }
+    if (!r.ok) throw new Error('API error');
+    return r.json();
+  }).then(data => {
+    if (!data) return;
+    sessionStorage.setItem('stories-admin-key', adminKey);
+    document.getElementById('auth-overlay').classList.add('hidden');
+    loadStories();
+  }).catch(err => {
+    document.getElementById('auth-error').textContent = 'Connection error — try again';
+    adminKey = '';
+  });
+}
+
+function logout() {
+  adminKey = '';
+  sessionStorage.removeItem('stories-admin-key');
+  document.getElementById('auth-overlay').classList.remove('hidden');
+  document.getElementById('auth-key').value = '';
+  document.getElementById('auth-error').textContent = '';
+}
+
+// Auto-login from session
+(function() {
+  const saved = sessionStorage.getItem('stories-admin-key');
+  if (saved) {
+    adminKey = saved;
+    document.getElementById('auth-overlay').classList.add('hidden');
+    loadStories();
+  }
+  // Enter key on auth input
+  document.getElementById('auth-key').addEventListener('keydown', e => {
+    if (e.key === 'Enter') authenticate();
+  });
+})();
+
+// ── Load stories ──
+async function loadStories() {
+  const listEl = document.getElementById('story-list');
+  listEl.innerHTML = '<div class="loading">Loading stories</div>';
+
+  const category = document.getElementById('filter-category').value;
+  let url = `${API_BASE}/api/admin/stories?limit=100&status=${currentStatusFilter}&category=${category}`;
+
+  try {
+    const res = await fetch(url, { headers: { 'X-Admin-Key': adminKey } });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+
+    // Update stats
+    if (data.counts) {
+      document.getElementById('stat-total').textContent = data.counts.total;
+      document.getElementById('stat-pending').textContent = data.counts.pending;
+      document.getElementById('stat-approved').textContent = data.counts.approved;
+      document.getElementById('stat-rejected').textContent = data.counts.rejected;
+    }
+
+    storiesCache = data.stories || [];
+
+    if (storiesCache.length === 0) {
+      listEl.innerHTML = '<div class="empty-state">No stories match the current filters</div>';
+      return;
+    }
+
+    listEl.innerHTML = storiesCache.map(s => renderStoryCard(s)).join('');
+  } catch (err) {
+    listEl.innerHTML = `<div class="empty-state">Error loading stories: ${err.message}</div>`;
+  }
+}
+
+function renderStoryCard(s) {
+  const cat = formatCategory(s.category);
+  const date = s.createdAt ? new Date(s.createdAt).toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric'
+  }) : '—';
+  const initials = s.initials || '—';
+  const preview = s.preview || '(no preview)';
+  const faith = s.faithTradition || '';
+
+  return `
+    <div class="story-card" id="card-${s.storyId}">
+      <div class="story-header" onclick="toggleCard('${s.storyId}')">
+        <span class="story-status ${s.status}">${s.status}</span>
+        <div class="story-meta">
+          <div class="story-preview">${escapeHtml(preview)}</div>
+          <div class="story-info">
+            <span>📅 ${date}</span>
+            <span>👤 ${escapeHtml(initials)}</span>
+            ${faith ? `<span>⛪ ${escapeHtml(faith)}</span>` : ''}
+            ${s.hasAudio ? '<span>🎙️ Audio</span>' : ''}
+          </div>
+        </div>
+        <span class="story-category">${cat}</span>
+        <span class="story-toggle">▾</span>
+      </div>
+      <div class="story-detail" id="detail-${s.storyId}">
+        <div class="loading" id="detail-loading-${s.storyId}">Loading full story</div>
+      </div>
+    </div>`;
+}
+
+// ── Toggle card & lazy-load detail ──
+async function toggleCard(storyId) {
+  const card = document.getElementById(`card-${storyId}`);
+  const wasExpanded = card.classList.contains('expanded');
+  card.classList.toggle('expanded');
+
+  if (wasExpanded) return; // collapsing, nothing to load
+
+  const detailEl = document.getElementById(`detail-${storyId}`);
+  const loadingEl = document.getElementById(`detail-loading-${storyId}`);
+
+  // If already loaded, skip
+  if (detailEl.dataset.loaded === 'true') return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/stories/${storyId}`, {
+      headers: { 'X-Admin-Key': adminKey }
+    });
+    if (res.status === 401) { logout(); return; }
+    const story = await res.json();
+
+    if (story.error) {
+      detailEl.innerHTML = `<div style="padding:16px;color:var(--red)">Error: ${story.error}</div>`;
+      return;
+    }
+
+    detailEl.innerHTML = renderStoryDetail(story);
+    detailEl.dataset.loaded = 'true';
+  } catch (err) {
+    detailEl.innerHTML = `<div style="padding:16px;color:var(--red)">Failed to load: ${err.message}</div>`;
+  }
+}
+
+function renderStoryDetail(s) {
+  const created = s.createdAt ? new Date(s.createdAt).toLocaleString() : '—';
+  const updated = s.updatedAt ? new Date(s.updatedAt).toLocaleString() : '—';
+  const modNotes = s.moderation?.notes || '';
+  const modAt = s.moderation?.moderatedAt ? new Date(s.moderation.moderatedAt).toLocaleString() : null;
+
+  return `
+    <div class="detail-grid">
+      <div class="detail-item">
+        <div class="label">Name (private)</div>
+        <div class="value">${escapeHtml(s.name || '—')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Email (private)</div>
+        <div class="value">${escapeHtml(s.email || '—')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Location</div>
+        <div class="value">${escapeHtml(s.location || '—')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Category</div>
+        <div class="value">${formatCategory(s.category)}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Display Initials</div>
+        <div class="value">${s.displayInitials ? '✅ Yes — ' + escapeHtml(s.initials || '') : '❌ No'}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Faith Tradition</div>
+        <div class="value">${escapeHtml(s.faithTradition || '—')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Submitted</div>
+        <div class="value">${created}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Updated</div>
+        <div class="value">${updated}</div>
+      </div>
+      <div class="detail-item">
+        <div class="label">Consent</div>
+        <div class="value">${s.consent ? '✅' : '❌'} Share &nbsp;|&nbsp; ${s.contentUseConsent ? '✅' : '❌'} Content Use &nbsp;|&nbsp; ${s.ageConfirmed ? '✅' : '❌'} 18+</div>
+      </div>
+      ${modAt ? `
+      <div class="detail-item">
+        <div class="label">Moderated</div>
+        <div class="value">${modAt} by ${escapeHtml(s.moderation?.moderatedBy || 'admin')}</div>
+      </div>` : ''}
+    </div>
+
+    <div class="story-full-text">${escapeHtml(s.story || '')}</div>
+
+    ${s.audioUrl ? `<div style="margin: 12px 0;"><audio controls src="${s.audioUrl}" style="width:100%;max-width:400px;"></audio></div>` : ''}
+
+    <div class="mod-actions">
+      <textarea id="notes-${s.storyId}" placeholder="Moderation notes (optional)...">${escapeHtml(modNotes)}</textarea>
+      <button class="btn btn-approve" onclick="moderate('${s.storyId}', 'approved')" ${s.status === 'approved' ? 'disabled' : ''}>
+        ✓ Approve
+      </button>
+      <button class="btn btn-reject" onclick="moderate('${s.storyId}', 'rejected')" ${s.status === 'rejected' ? 'disabled' : ''}>
+        ✗ Reject
+      </button>
+    </div>`;
+}
+
+// ── Moderate ──
+async function moderate(storyId, status) {
+  const notes = document.getElementById(`notes-${storyId}`)?.value || '';
+  const card = document.getElementById(`card-${storyId}`);
+
+  // Disable buttons during request
+  card.querySelectorAll('.btn').forEach(b => b.disabled = true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/stories/${storyId}/moderate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Key': adminKey,
+      },
+      body: JSON.stringify({ status, notes }),
+    });
+
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+
+    if (data.success) {
+      showToast(`Story ${status}!`, 'success');
+      // Update card status badge inline
+      const badge = card.querySelector('.story-status');
+      if (badge) {
+        badge.className = `story-status ${status}`;
+        badge.textContent = status;
+      }
+      // Update buttons
+      card.querySelectorAll('.btn-approve').forEach(b => b.disabled = status === 'approved');
+      card.querySelectorAll('.btn-reject').forEach(b => b.disabled = status === 'rejected');
+      // Refresh stats
+      setTimeout(loadStories, 800);
+    } else {
+      showToast(data.error || 'Moderation failed', 'error');
+      card.querySelectorAll('.btn').forEach(b => b.disabled = false);
+    }
+  } catch (err) {
+    showToast('Network error: ' + err.message, 'error');
+    card.querySelectorAll('.btn').forEach(b => b.disabled = false);
+  }
+}
+
+// ── Helpers ──
+function filterByStatus(status, el) {
+  currentStatusFilter = status;
+  document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  loadStories();
+}
+
+function formatCategory(cat) {
+  const map = {
+    testimony: 'Testimony',
+    faith_journey: 'Faith Journey',
+    prayer_answer: 'Prayer Answer',
+    conversion: 'Conversion',
+    miracle: 'Miracle',
+    other: 'Other',
+  };
+  return map[cat] || cat || '—';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => { t.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
