@@ -6,9 +6,9 @@
 <title>Stories Admin — LessonCraft</title>
 <style>
   :root {
-    --navy: #1a1a2e;
-    --gold: #c9a84c;
-    --cream: #f5f0e8;
+    --navy: #1A1A2E;
+    --gold: #C9A84C;
+    --cream: #F5F0E8;
     --green: #2d6a4f;
     --red: #c0392b;
     --orange: #e67e22;
@@ -153,9 +153,43 @@
   .stat-card.approved .stat-num { color: var(--green); }
   .stat-card.rejected .stat-num { color: var(--red); }
 
-  /* Filters */
+  /* Controls */
+  .controls {
+    padding: 16px 24px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box input:focus { border-color: var(--gold); }
+  .search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
   .filters {
-    padding: 12px 24px;
     display: flex;
     gap: 12px;
     align-items: center;
@@ -168,7 +202,9 @@
     font-size: 14px;
     background: white;
     cursor: pointer;
+    outline: none;
   }
+  .filters select:focus { border-color: var(--gold); }
   .filters label {
     font-size: 13px;
     color: var(--gray);
@@ -212,6 +248,12 @@
     flex: 1;
     min-width: 0;
   }
+  .story-meta .story-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
   .story-meta .story-preview {
     font-size: 14px;
     color: #444;
@@ -222,7 +264,7 @@
   .story-meta .story-info {
     font-size: 12px;
     color: var(--gray);
-    margin-top: 2px;
+    margin-top: 4px;
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
@@ -293,17 +335,6 @@
     padding-top: 16px;
     border-top: 1px solid var(--border);
   }
-  .mod-actions textarea {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13px;
-    resize: vertical;
-    min-height: 36px;
-    max-height: 100px;
-    font-family: inherit;
-  }
   .btn {
     padding: 8px 20px;
     border: none;
@@ -360,17 +391,23 @@
   .toast.error { background: var(--red); }
 
   /* Responsive */
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     header h1 { font-size: 16px; }
     .stats-bar { gap: 8px; padding: 12px 16px; }
     .stat-card { padding: 8px 14px; min-width: 80px; }
     .stat-card .stat-num { font-size: 22px; }
     .story-list { padding: 0 12px 12px; }
     .story-header { padding: 12px 14px; gap: 10px; }
-    .filters { padding: 10px 12px; }
-    .detail-grid { grid-template-columns: 1fr 1fr; }
+    .controls { padding: 10px 12px; }
+    .search-box { min-width: 150px; }
+    .detail-grid { grid-template-columns: 1fr; }
     .mod-actions { flex-wrap: wrap; }
-    .mod-actions textarea { min-width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-box { min-width: 100%; }
+    .filters { justify-content: space-between; }
   }
 </style>
 </head>
@@ -380,8 +417,8 @@
 <div id="auth-overlay">
   <div class="auth-card">
     <h1>🔐 Stories Admin</h1>
-    <p>Enter admin key to access the moderation dashboard</p>
-    <input type="password" id="auth-key" placeholder="Admin Key" autocomplete="off">
+    <p>Enter admin password to access the moderation dashboard</p>
+    <input type="password" id="auth-password" placeholder="Admin Password" autocomplete="off">
     <div class="auth-error" id="auth-error"></div>
     <button onclick="authenticate()">Sign In</button>
   </div>
@@ -415,17 +452,22 @@
   </div>
 </div>
 
-<div class="filters">
-  <label for="filter-category">Category:</label>
-  <select id="filter-category" onchange="loadStories()">
-    <option value="all">All Categories</option>
-    <option value="testimony">Testimony</option>
-    <option value="faith_journey">Faith Journey</option>
-    <option value="prayer_answer">Prayer Answer</option>
-    <option value="conversion">Conversion</option>
-    <option value="miracle">Miracle</option>
-    <option value="other">Other</option>
-  </select>
+<div class="controls">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Search by author name or content..." oninput="handleSearch()">
+  </div>
+  <div class="filters">
+    <label for="filter-category">Category:</label>
+    <select id="filter-category" onchange="loadStories()">
+      <option value="">All Categories</option>
+    </select>
+    
+    <label for="sort-order">Sort:</label>
+    <select id="sort-order" onchange="applySorting()">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+    </select>
+  </div>
 </div>
 
 <div class="story-list" id="story-list">
@@ -435,292 +477,350 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API_BASE = 'https://api.aituned.io';
-let adminKey = '';
+const API_BASE = 'https://api.aituned.io/api';
+const ADMIN_PASSWORD = 'tred2026';
+let isAuthenticated = false;
 let currentStatusFilter = 'all';
-let storiesCache = [];
+let allStories = [];
+let filteredStories = [];
+let searchTimeout = null;
+let categories = new Set();
 
 // ── Auth ──
 function authenticate() {
-  const key = document.getElementById('auth-key').value.trim();
-  if (!key) {
-    document.getElementById('auth-error').textContent = 'Please enter the admin key';
+  const password = document.getElementById('auth-password').value.trim();
+  const errorEl = document.getElementById('auth-error');
+  
+  if (!password) {
+    errorEl.textContent = 'Please enter the admin password';
     return;
   }
-  adminKey = key;
-  // Test the key with a list request
-  fetch(`${API_BASE}/api/admin/stories?limit=1`, {
-    headers: { 'X-Admin-Key': adminKey }
-  }).then(r => {
-    if (r.status === 401) {
-      document.getElementById('auth-error').textContent = 'Invalid admin key';
-      adminKey = '';
-      return;
-    }
-    if (!r.ok) throw new Error('API error');
-    return r.json();
-  }).then(data => {
-    if (!data) return;
-    sessionStorage.setItem('stories-admin-key', adminKey);
-    document.getElementById('auth-overlay').classList.add('hidden');
-    loadStories();
-  }).catch(err => {
-    document.getElementById('auth-error').textContent = 'Connection error — try again';
-    adminKey = '';
-  });
+  
+  if (password !== ADMIN_PASSWORD) {
+    errorEl.textContent = 'Invalid password';
+    return;
+  }
+  
+  isAuthenticated = true;
+  sessionStorage.setItem('stories-admin-auth', 'true');
+  document.getElementById('auth-overlay').classList.add('hidden');
+  loadStories();
 }
 
 function logout() {
-  adminKey = '';
-  sessionStorage.removeItem('stories-admin-key');
+  isAuthenticated = false;
+  sessionStorage.removeItem('stories-admin-auth');
   document.getElementById('auth-overlay').classList.remove('hidden');
-  document.getElementById('auth-key').value = '';
+  document.getElementById('auth-password').value = '';
   document.getElementById('auth-error').textContent = '';
 }
 
 // Auto-login from session
 (function() {
-  const saved = sessionStorage.getItem('stories-admin-key');
-  if (saved) {
-    adminKey = saved;
+  if (sessionStorage.getItem('stories-admin-auth') === 'true') {
+    isAuthenticated = true;
     document.getElementById('auth-overlay').classList.add('hidden');
     loadStories();
   }
+  
   // Enter key on auth input
-  document.getElementById('auth-key').addEventListener('keydown', e => {
+  document.getElementById('auth-password').addEventListener('keydown', e => {
     if (e.key === 'Enter') authenticate();
   });
 })();
 
 // ── Load stories ──
 async function loadStories() {
+  if (!isAuthenticated) return;
+  
   const listEl = document.getElementById('story-list');
   listEl.innerHTML = '<div class="loading">Loading stories</div>';
 
-  const category = document.getElementById('filter-category').value;
-  let url = `${API_BASE}/api/admin/stories?limit=100&status=${currentStatusFilter}&category=${category}`;
-
   try {
-    const res = await fetch(url, { headers: { 'X-Admin-Key': adminKey } });
-    if (res.status === 401) { logout(); return; }
+    const res = await fetch(`${API_BASE}/stories?limit=1000`);
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    
     const data = await res.json();
-
-    // Update stats
-    if (data.counts) {
-      document.getElementById('stat-total').textContent = data.counts.total;
-      document.getElementById('stat-pending').textContent = data.counts.pending;
-      document.getElementById('stat-approved').textContent = data.counts.approved;
-      document.getElementById('stat-rejected').textContent = data.counts.rejected;
-    }
-
-    storiesCache = data.stories || [];
-
-    if (storiesCache.length === 0) {
-      listEl.innerHTML = '<div class="empty-state">No stories match the current filters</div>';
-      return;
-    }
-
-    listEl.innerHTML = storiesCache.map(s => renderStoryCard(s)).join('');
+    allStories = data.stories || [];
+    
+    // Extract categories for filter
+    categories.clear();
+    allStories.forEach(story => {
+      if (story.category) categories.add(story.category);
+    });
+    populateCategoryFilter();
+    
+    updateStats();
+    applyFilters();
+    
   } catch (err) {
+    console.error('Load stories error:', err);
     listEl.innerHTML = `<div class="empty-state">Error loading stories: ${err.message}</div>`;
   }
 }
 
-function renderStoryCard(s) {
-  const cat = formatCategory(s.category);
-  const date = s.createdAt ? new Date(s.createdAt).toLocaleDateString('en-US', {
+function populateCategoryFilter() {
+  const select = document.getElementById('filter-category');
+  const currentValue = select.value;
+  
+  // Keep "All Categories" and add found categories
+  select.innerHTML = '<option value="">All Categories</option>';
+  
+  Array.from(categories).sort().forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = formatCategory(cat);
+    select.appendChild(option);
+  });
+  
+  // Restore selection
+  if (currentValue && categories.has(currentValue)) {
+    select.value = currentValue;
+  }
+}
+
+function updateStats() {
+  const stats = allStories.reduce((acc, story) => {
+    acc.total++;
+    acc[story.status] = (acc[story.status] || 0) + 1;
+    return acc;
+  }, { total: 0, pending: 0, approved: 0, rejected: 0 });
+
+  document.getElementById('stat-total').textContent = stats.total;
+  document.getElementById('stat-pending').textContent = stats.pending;
+  document.getElementById('stat-approved').textContent = stats.approved;
+  document.getElementById('stat-rejected').textContent = stats.rejected;
+}
+
+function applyFilters() {
+  const categoryFilter = document.getElementById('filter-category').value;
+  const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+  
+  filteredStories = allStories.filter(story => {
+    // Status filter
+    if (currentStatusFilter !== 'all' && story.status !== currentStatusFilter) {
+      return false;
+    }
+    
+    // Category filter
+    if (categoryFilter && story.category !== categoryFilter) {
+      return false;
+    }
+    
+    // Search filter
+    if (searchTerm) {
+      const searchableText = [
+        story.displayName || '',
+        story.initials || '', 
+        story.title || '',
+        story.preview || '',
+        story.fullText || story.story || '',
+        story.faithTradition || '',
+        story.location || ''
+      ].join(' ').toLowerCase();
+      
+      if (!searchableText.includes(searchTerm)) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
+  
+  applySorting();
+}
+
+function applySorting() {
+  const sortOrder = document.getElementById('sort-order').value;
+  
+  filteredStories.sort((a, b) => {
+    const dateA = new Date(a.createdAt || 0);
+    const dateB = new Date(b.createdAt || 0);
+    
+    return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+  });
+  
+  renderStories();
+}
+
+function renderStories() {
+  const listEl = document.getElementById('story-list');
+  
+  if (filteredStories.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">No stories match the current filters</div>';
+    return;
+  }
+  
+  listEl.innerHTML = filteredStories.map(story => renderStoryCard(story)).join('');
+}
+
+function renderStoryCard(story) {
+  const date = story.createdAt ? new Date(story.createdAt).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric'
   }) : '—';
-  const initials = s.initials || '—';
-  const preview = s.preview || '(no preview)';
-  const faith = s.faithTradition || '';
+  
+  const initials = story.initials || story.displayName || '—';
+  const title = story.title || '';
+  const preview = story.preview || (story.fullText || story.story || '').substring(0, 100);
+  const faith = story.faithTradition || '';
+  const location = story.location || '';
+  const category = formatCategory(story.category);
 
   return `
-    <div class="story-card" id="card-${s.storyId}">
-      <div class="story-header" onclick="toggleCard('${s.storyId}')">
-        <span class="story-status ${s.status}">${s.status}</span>
+    <div class="story-card" id="card-${story.id || story.storyId}">
+      <div class="story-header" onclick="toggleCard('${story.id || story.storyId}')">
+        <span class="story-status ${story.status}">${story.status}</span>
         <div class="story-meta">
-          <div class="story-preview">${escapeHtml(preview)}</div>
+          ${title ? `<div class="story-title">${escapeHtml(title)}</div>` : ''}
+          <div class="story-preview">${escapeHtml(preview)}${preview.length >= 100 ? '...' : ''}</div>
           <div class="story-info">
             <span>📅 ${date}</span>
             <span>👤 ${escapeHtml(initials)}</span>
             ${faith ? `<span>⛪ ${escapeHtml(faith)}</span>` : ''}
-            ${s.hasAudio ? '<span>🎙️ Audio</span>' : ''}
+            ${location ? `<span>📍 ${escapeHtml(location)}</span>` : ''}
+            ${story.hasAudio ? '<span>🎙️ Audio</span>' : ''}
           </div>
         </div>
-        <span class="story-category">${cat}</span>
+        <span class="story-category">${category}</span>
         <span class="story-toggle">▾</span>
       </div>
-      <div class="story-detail" id="detail-${s.storyId}">
-        <div class="loading" id="detail-loading-${s.storyId}">Loading full story</div>
+      <div class="story-detail" id="detail-${story.id || story.storyId}">
+        ${renderStoryDetail(story)}
       </div>
     </div>`;
 }
 
-// ── Toggle card & lazy-load detail ──
-async function toggleCard(storyId) {
-  const card = document.getElementById(`card-${storyId}`);
-  const wasExpanded = card.classList.contains('expanded');
-  card.classList.toggle('expanded');
-
-  if (wasExpanded) return; // collapsing, nothing to load
-
-  const detailEl = document.getElementById(`detail-${storyId}`);
-  const loadingEl = document.getElementById(`detail-loading-${storyId}`);
-
-  // If already loaded, skip
-  if (detailEl.dataset.loaded === 'true') return;
-
-  try {
-    const res = await fetch(`${API_BASE}/api/admin/stories/${storyId}`, {
-      headers: { 'X-Admin-Key': adminKey }
-    });
-    if (res.status === 401) { logout(); return; }
-    const story = await res.json();
-
-    if (story.error) {
-      detailEl.innerHTML = `<div style="padding:16px;color:var(--red)">Error: ${story.error}</div>`;
-      return;
-    }
-
-    detailEl.innerHTML = renderStoryDetail(story);
-    detailEl.dataset.loaded = 'true';
-  } catch (err) {
-    detailEl.innerHTML = `<div style="padding:16px;color:var(--red)">Failed to load: ${err.message}</div>`;
-  }
-}
-
-function renderStoryDetail(s) {
-  const created = s.createdAt ? new Date(s.createdAt).toLocaleString() : '—';
-  const updated = s.updatedAt ? new Date(s.updatedAt).toLocaleString() : '—';
-  const modNotes = s.moderation?.notes || '';
-  const modAt = s.moderation?.moderatedAt ? new Date(s.moderation.moderatedAt).toLocaleString() : null;
+function renderStoryDetail(story) {
+  const created = story.createdAt ? new Date(story.createdAt).toLocaleString() : '—';
+  const fullText = story.fullText || story.story || '';
 
   return `
     <div class="detail-grid">
       <div class="detail-item">
-        <div class="label">Name (private)</div>
-        <div class="value">${escapeHtml(s.name || '—')}</div>
+        <div class="label">Author</div>
+        <div class="value">${escapeHtml(story.displayName || '—')}</div>
       </div>
       <div class="detail-item">
-        <div class="label">Email (private)</div>
-        <div class="value">${escapeHtml(s.email || '—')}</div>
+        <div class="label">Title</div>
+        <div class="value">${escapeHtml(story.title || '—')}</div>
       </div>
       <div class="detail-item">
         <div class="label">Location</div>
-        <div class="value">${escapeHtml(s.location || '—')}</div>
+        <div class="value">${escapeHtml(story.location || '—')}</div>
       </div>
       <div class="detail-item">
         <div class="label">Category</div>
-        <div class="value">${formatCategory(s.category)}</div>
-      </div>
-      <div class="detail-item">
-        <div class="label">Display Initials</div>
-        <div class="value">${s.displayInitials ? '✅ Yes — ' + escapeHtml(s.initials || '') : '❌ No'}</div>
+        <div class="value">${formatCategory(story.category)}</div>
       </div>
       <div class="detail-item">
         <div class="label">Faith Tradition</div>
-        <div class="value">${escapeHtml(s.faithTradition || '—')}</div>
+        <div class="value">${escapeHtml(story.faithTradition || '—')}</div>
       </div>
       <div class="detail-item">
         <div class="label">Submitted</div>
         <div class="value">${created}</div>
       </div>
-      <div class="detail-item">
-        <div class="label">Updated</div>
-        <div class="value">${updated}</div>
-      </div>
-      <div class="detail-item">
-        <div class="label">Consent</div>
-        <div class="value">${s.consent ? '✅' : '❌'} Share &nbsp;|&nbsp; ${s.contentUseConsent ? '✅' : '❌'} Content Use &nbsp;|&nbsp; ${s.ageConfirmed ? '✅' : '❌'} 18+</div>
-      </div>
-      ${modAt ? `
-      <div class="detail-item">
-        <div class="label">Moderated</div>
-        <div class="value">${modAt} by ${escapeHtml(s.moderation?.moderatedBy || 'admin')}</div>
-      </div>` : ''}
     </div>
 
-    <div class="story-full-text">${escapeHtml(s.story || '')}</div>
+    <div class="story-full-text">${escapeHtml(fullText)}</div>
 
-    ${s.audioUrl ? `<div style="margin: 12px 0;"><audio controls src="${s.audioUrl}" style="width:100%;max-width:400px;"></audio></div>` : ''}
+    ${story.audioUrl ? `<div style="margin: 12px 0;"><audio controls src="${story.audioUrl}" style="width:100%;max-width:400px;"></audio></div>` : ''}
 
     <div class="mod-actions">
-      <textarea id="notes-${s.storyId}" placeholder="Moderation notes (optional)...">${escapeHtml(modNotes)}</textarea>
-      <button class="btn btn-approve" onclick="moderate('${s.storyId}', 'approved')" ${s.status === 'approved' ? 'disabled' : ''}>
+      <button class="btn btn-approve" onclick="moderate('${story.id || story.storyId}', 'approve')" ${story.status === 'approved' ? 'disabled' : ''}>
         ✓ Approve
       </button>
-      <button class="btn btn-reject" onclick="moderate('${s.storyId}', 'rejected')" ${s.status === 'rejected' ? 'disabled' : ''}>
+      <button class="btn btn-reject" onclick="moderate('${story.id || story.storyId}', 'reject')" ${story.status === 'rejected' ? 'disabled' : ''}>
         ✗ Reject
       </button>
     </div>`;
 }
 
-// ── Moderate ──
-async function moderate(storyId, status) {
-  const notes = document.getElementById(`notes-${storyId}`)?.value || '';
+// ── Toggle card ──
+function toggleCard(storyId) {
   const card = document.getElementById(`card-${storyId}`);
+  card.classList.toggle('expanded');
+}
 
+// ── Search ──
+function handleSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    applyFilters();
+  }, 300); // Debounce search
+}
+
+// ── Moderate ──
+async function moderate(storyId, action) {
+  if (!isAuthenticated) return;
+  
+  const card = document.getElementById(`card-${storyId}`);
+  const buttons = card.querySelectorAll('.btn');
+  
   // Disable buttons during request
-  card.querySelectorAll('.btn').forEach(b => b.disabled = true);
+  buttons.forEach(btn => btn.disabled = true);
 
   try {
-    const res = await fetch(`${API_BASE}/api/stories/${storyId}/moderate`, {
+    const res = await fetch(`${API_BASE}/stories/${storyId}/moderate`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Key': adminKey,
-      },
-      body: JSON.stringify({ status, notes }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
     });
 
-    if (res.status === 401) { logout(); return; }
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
     const data = await res.json();
 
-    if (data.success) {
-      showToast(`Story ${status}!`, 'success');
-      // Update card status badge inline
+    if (data.success || res.ok) {
+      const newStatus = action === 'approve' ? 'approved' : 'rejected';
+      showToast(`Story ${newStatus}!`, 'success');
+      
+      // Update story in cache
+      const storyIndex = allStories.findIndex(s => (s.id || s.storyId) == storyId);
+      if (storyIndex >= 0) {
+        allStories[storyIndex].status = newStatus;
+      }
+      
+      // Update UI
       const badge = card.querySelector('.story-status');
       if (badge) {
-        badge.className = `story-status ${status}`;
-        badge.textContent = status;
+        badge.className = `story-status ${newStatus}`;
+        badge.textContent = newStatus;
       }
-      // Update buttons
-      card.querySelectorAll('.btn-approve').forEach(b => b.disabled = status === 'approved');
-      card.querySelectorAll('.btn-reject').forEach(b => b.disabled = status === 'rejected');
+      
+      // Update button states
+      card.querySelector('.btn-approve').disabled = newStatus === 'approved';
+      card.querySelector('.btn-reject').disabled = newStatus === 'rejected';
+      
       // Refresh stats
-      setTimeout(loadStories, 800);
+      updateStats();
     } else {
-      showToast(data.error || 'Moderation failed', 'error');
-      card.querySelectorAll('.btn').forEach(b => b.disabled = false);
+      throw new Error(data.error || 'Moderation failed');
     }
   } catch (err) {
-    showToast('Network error: ' + err.message, 'error');
-    card.querySelectorAll('.btn').forEach(b => b.disabled = false);
+    console.error('Moderation error:', err);
+    showToast('Error: ' + err.message, 'error');
+    buttons.forEach(btn => btn.disabled = false);
   }
 }
 
-// ── Helpers ──
+// ── Filters ──
 function filterByStatus(status, el) {
   currentStatusFilter = status;
   document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
   if (el) el.classList.add('active');
-  loadStories();
+  applyFilters();
 }
 
+// ── Helpers ──
 function formatCategory(cat) {
-  const map = {
-    testimony: 'Testimony',
-    faith_journey: 'Faith Journey',
-    prayer_answer: 'Prayer Answer',
-    conversion: 'Conversion',
-    miracle: 'Miracle',
-    other: 'Other',
-  };
-  return map[cat] || cat || '—';
+  if (!cat) return '—';
+  return cat.split('_').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join(' ');
 }
 
 function escapeHtml(str) {
+  if (!str) return '';
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
