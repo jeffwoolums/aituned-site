@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beta Testers Admin — LessonCraft</title>
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #FAF6F0;
+      --navy: #1E2A3A;
+      --gold: #B8860B;
+      --brown: #5C4A32;
+      --paper: #ffffff;
+      --border: rgba(30, 42, 58, 0.14);
+      --shadow: 0 18px 50px rgba(30, 42, 58, 0.10);
+      --focus: 0 0 0 4px rgba(184, 134, 11, 0.22);
+      --ok: #2d6a4f;
+      --warn: #a97100;
+      --muted: rgba(92, 74, 50, 0.72);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--brown);
+      font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
+      line-height: 1.45;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--navy);
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand .name {
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-size: 16px;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .brand .section {
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.86);
+      white-space: nowrap;
+    }
+
+    .brand .section span { color: var(--gold); }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      cursor: pointer;
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 12px;
+      transition: background 140ms ease;
+      white-space: nowrap;
+    }
+    .btn:hover { background: rgba(255,255,255,0.22); }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 16px 34px;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .toolbar {
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      background:
+        radial-gradient(900px 260px at 30% -10%, rgba(184, 134, 11, 0.14), transparent 60%),
+        linear-gradient(180deg, rgba(250, 246, 240, 0.80), rgba(250, 246, 240, 0.40));
+    }
+
+    .toolbar-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .stat {
+      border: 1px solid rgba(30, 42, 58, 0.16);
+      border-radius: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.75);
+      min-width: 140px;
+    }
+
+    .stat .n {
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .stat .l {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"], select {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(30, 42, 58, 0.22);
+      background: #fff;
+      color: var(--brown);
+      font-size: 16px;
+      font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
+      outline: none;
+      transition: box-shadow 140ms ease, border-color 140ms ease;
+    }
+
+    input[type="text"]:focus, select:focus {
+      border-color: rgba(184, 134, 11, 0.75);
+      box-shadow: var(--focus);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    thead th {
+      text-align: left;
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: rgba(30, 42, 58, 0.88);
+      background: rgba(250, 246, 240, 0.70);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 12px;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      border-bottom: 1px solid rgba(30, 42, 58, 0.10);
+      padding: 12px 12px;
+      vertical-align: top;
+      font-size: 16px;
+    }
+
+    tbody tr:hover td { background: rgba(250, 246, 240, 0.55); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      border: 1px solid rgba(30, 42, 58, 0.16);
+      background: rgba(255,255,255,0.8);
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .pill.ok { border-color: rgba(45, 106, 79, 0.40); color: var(--ok); background: rgba(45, 106, 79, 0.08); }
+    .pill.pending { border-color: rgba(169, 113, 0, 0.40); color: var(--warn); background: rgba(184, 134, 11, 0.10); }
+
+    .row-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-small {
+      border: 1px solid rgba(30, 42, 58, 0.16);
+      background: var(--navy);
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 140ms ease, transform 120ms ease;
+      white-space: nowrap;
+    }
+
+    .btn-small:hover { background: var(--gold); color: var(--navy); }
+    .btn-small:active { transform: translateY(1px); }
+    .btn-small:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .empty {
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    /* Auth overlay */
+    #auth-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(30, 42, 58, 0.92);
+      z-index: 999;
+    }
+
+    #auth-overlay.hidden { display: none; }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 26px 70px rgba(0,0,0,0.35);
+      padding: 22px;
+    }
+
+    .auth-card h1 {
+      margin: 0;
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      font-size: 20px;
+      color: var(--navy);
+    }
+
+    .auth-card p {
+      margin: 8px 0 14px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .auth-card input {
+      width: 100%;
+    }
+
+    .auth-card .auth-error {
+      margin-top: 10px;
+      min-height: 22px;
+      color: #7a1f1f;
+      font-size: 15px;
+    }
+
+    .auth-card .auth-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .auth-card .auth-actions button {
+      flex: 1;
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: var(--navy);
+      color: #fff;
+      cursor: pointer;
+      font-family: "Cinzel", ui-serif, serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 12px;
+      transition: background 140ms ease;
+    }
+
+    .auth-card .auth-actions button:hover { background: var(--gold); color: var(--navy); }
+
+    @media (max-width: 640px) {
+      .brand { flex-direction: column; align-items: flex-start; gap: 2px; }
+      .header-actions { display: none; }
+      table { min-width: 740px; }
+      input[type="text"], select { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="auth-overlay">
+    <div class="auth-card">
+      <h1>Beta Testers Admin</h1>
+      <p>Enter your admin key to view and manage beta signups.</p>
+      <input type="text" id="admin-key" placeholder="Admin Key" autocomplete="off" spellcheck="false" />
+      <div class="auth-error" id="auth-error"></div>
+      <div class="auth-actions">
+        <button id="btn-auth" type="button">Sign In</button>
+        <button id="btn-clear" type="button" style="background: rgba(30,42,58,0.12); color: var(--navy); border: 1px solid rgba(30,42,58,0.18);">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="name">LessonCraft</div>
+        <div class="section"><span>Beta</span> Testers</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" type="button" id="btn-refresh">Refresh</button>
+        <button class="btn" type="button" id="btn-signout">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="stat">
+            <div class="n" id="stat-total">—</div>
+            <div class="l">Total signups</div>
+          </div>
+          <div class="stat">
+            <div class="n" id="stat-pending">—</div>
+            <div class="l">Pending provision</div>
+          </div>
+          <div class="stat">
+            <div class="n" id="stat-provisioned">—</div>
+            <div class="l">Provisioned</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <input type="text" id="search" placeholder="Search name or email..." />
+          <select id="filter">
+            <option value="all" selected>All</option>
+            <option value="pending">Pending</option>
+            <option value="provisioned">Provisioned</option>
+          </select>
+          <select id="sort">
+            <option value="newest" selected>Newest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table aria-label="Beta testers">
+          <thead>
+            <tr>
+              <th style="min-width: 200px;">Name</th>
+              <th style="min-width: 240px;">Email</th>
+              <th style="min-width: 120px;">Device</th>
+              <th style="min-width: 170px;">Signed Up</th>
+              <th style="min-width: 170px;">Status</th>
+              <th style="min-width: 200px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="6" class="empty">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty" class="empty" style="display:none;">No testers match the current filters.</div>
+    </section>
+  </main>
+
+<script>
+  const API_BASE = 'https://api.aituned.io/api/beta';
+  const STORAGE_KEY = 'lessoncraft-beta-admin-key';
+
+  let adminKey = '';
+  let testers = [];
+
+  const elOverlay = document.getElementById('auth-overlay');
+  const elAdminKey = document.getElementById('admin-key');
+  const elAuthErr = document.getElementById('auth-error');
+
+  const elTbody = document.getElementById('tbody');
+  const elEmpty = document.getElementById('empty');
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = String(str ?? '');
+    return d.innerHTML;
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '—';
+    return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+
+  function setAuthError(msg) {
+    elAuthErr.textContent = msg || '';
+  }
+
+  async function apiFetch(path, options = {}) {
+    const headers = Object.assign({}, options.headers || {}, {
+      'X-Admin-Key': adminKey,
+    });
+
+    const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.status === 401) {
+      throw new Error('Unauthorized. Please sign in again.');
+    }
+    if (!res.ok) {
+      throw new Error(data?.error || data?.message || `Request failed (${res.status})`);
+    }
+    return data;
+  }
+
+  function computeStats(list) {
+    const total = list.length;
+    const provisioned = list.filter(t => !!t.provisioned).length;
+    const pending = total - provisioned;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-pending').textContent = pending;
+    document.getElementById('stat-provisioned').textContent = provisioned;
+  }
+
+  function applyFilters() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    const filter = document.getElementById('filter').value;
+    const sort = document.getElementById('sort').value;
+
+    let list = [...testers];
+
+    if (filter === 'pending') list = list.filter(t => !t.provisioned);
+    if (filter === 'provisioned') list = list.filter(t => !!t.provisioned);
+
+    if (q) {
+      list = list.filter(t => {
+        const hay = `${t.firstName || ''} ${t.lastName || ''} ${t.email || ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    list.sort((a, b) => {
+      const da = new Date(a.signedUpAt || 0).getTime();
+      const db = new Date(b.signedUpAt || 0).getTime();
+      return sort === 'oldest' ? (da - db) : (db - da);
+    });
+
+    renderTable(list);
+  }
+
+  function renderTable(list) {
+    computeStats(testers);
+
+    if (!list.length) {
+      elTbody.innerHTML = '';
+      elEmpty.style.display = 'block';
+      return;
+    }
+
+    elEmpty.style.display = 'none';
+
+    elTbody.innerHTML = list.map(t => {
+      const name = `${t.firstName || ''} ${t.lastName || ''}`.trim() || '—';
+      const statusPill = t.provisioned
+        ? '<span class="pill ok">Provisioned</span>'
+        : '<span class="pill pending">Pending</span>';
+
+      const btn = t.provisioned
+        ? `<button class="btn-small" disabled type="button">Marked</button>`
+        : `<button class="btn-small" type="button" onclick="markProvisioned('${encodeURIComponent(t.email || '')}')">Mark Provisioned</button>`;
+
+      return `
+        <tr>
+          <td>${escapeHtml(name)}</td>
+          <td style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;">${escapeHtml(t.email || '—')}</td>
+          <td>${escapeHtml(t.device || '—')}</td>
+          <td>${escapeHtml(formatDate(t.signedUpAt))}</td>
+          <td>${statusPill}</td>
+          <td><div class="row-actions">${btn}</div></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function loadTesters() {
+    elTbody.innerHTML = '<tr><td colspan="6" class="empty">Loading...</td></tr>';
+    elEmpty.style.display = 'none';
+
+    const data = await apiFetch('/testers', { method: 'GET' });
+    testers = Array.isArray(data.testers) ? data.testers : [];
+    applyFilters();
+  }
+
+  async function markProvisioned(emailEncoded) {
+    const email = decodeURIComponent(emailEncoded);
+    if (!email) return;
+
+    const ok = confirm(`Mark provisioned for ${email}?`);
+    if (!ok) return;
+
+    try {
+      await apiFetch('/provision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, provisioned: true })
+      });
+
+      const idx = testers.findIndex(t => String(t.email || '').toLowerCase() === String(email).toLowerCase());
+      if (idx >= 0) testers[idx].provisioned = true;
+      applyFilters();
+
+    } catch (e) {
+      alert(e.message || 'Failed to update tester');
+    }
+  }
+
+  window.markProvisioned = markProvisioned;
+
+  function signOut() {
+    adminKey = '';
+    sessionStorage.removeItem(STORAGE_KEY);
+    elAdminKey.value = '';
+    setAuthError('');
+    elOverlay.classList.remove('hidden');
+  }
+
+  async function signIn() {
+    const key = elAdminKey.value.trim();
+    if (!key) {
+      setAuthError('Please enter your admin key.');
+      return;
+    }
+
+    adminKey = key;
+    setAuthError('');
+
+    try {
+      await loadTesters();
+      sessionStorage.setItem(STORAGE_KEY, adminKey);
+      elOverlay.classList.add('hidden');
+    } catch (e) {
+      adminKey = '';
+      setAuthError(e.message || 'Sign in failed');
+    }
+  }
+
+  // Wire up UI
+  document.getElementById('btn-auth').addEventListener('click', signIn);
+  document.getElementById('btn-clear').addEventListener('click', () => { elAdminKey.value = ''; setAuthError(''); });
+
+  document.getElementById('btn-refresh').addEventListener('click', () => loadTesters().catch(e => alert(e.message)));
+  document.getElementById('btn-signout').addEventListener('click', signOut);
+
+  document.getElementById('search').addEventListener('input', () => applyFilters());
+  document.getElementById('filter').addEventListener('change', () => applyFilters());
+  document.getElementById('sort').addEventListener('change', () => applyFilters());
+
+  elAdminKey.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') signIn();
+  });
+
+  // Auto-login from sessionStorage
+  (function init() {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      adminKey = stored;
+      elOverlay.classList.add('hidden');
+      loadTesters().catch(() => {
+        signOut();
+      });
+    }
+  })();
+</script>
+</body>
+</html>
