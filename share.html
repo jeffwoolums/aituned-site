@@ -511,6 +511,15 @@
               </div>
             </div>
 
+            <div class="checkline">
+              <input id="contentUseConsent" name="contentUseConsent" type="checkbox" required />
+              <div class="ct">
+                <strong>Content permission:</strong>
+                I grant LessonCraft and Gospel Tuned permission to use my testimony in app content including firesides, devotionals, and educational materials.
+                Stories may be referenced, quoted, or narrated as witness accounts or conversion stories.
+              </div>
+            </div>
+
             <div class="actions">
               <button id="btnSubmit" class="btn btn-primary" type="submit">Submit story</button>
               <span class="mini">By submitting, you agree to the consent statement above.</span>
@@ -751,6 +760,7 @@
         location: $('location').value.trim(),
         ageConfirmed: $('ageConfirmed').checked,
         consent: $('consent').checked,
+        contentUseConsent: $('contentUseConsent').checked,
         story: $('story').value.trim(),
         category: $('category').value,
         displayInitials: $('displayInitials').checked,

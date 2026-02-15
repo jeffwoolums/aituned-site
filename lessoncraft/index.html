@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LessonCraft — AI-Powered Lesson Preparation</title>
+  <meta name="description" content="Prepare beautiful, scripture-rich lessons and talks in minutes. AI-powered lesson builder with audio devotionals, 60+ language translations, and community stories." />
+  <meta name="theme-color" content="#1a2744" />
+  <meta property="og:title" content="LessonCraft — AI-Powered Lesson Preparation" />
+  <meta property="og:description" content="Beautiful, scripture-rich lessons and talks in minutes. Available on iOS and Android." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aituned.io/lessoncraft" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #1a2744;
+      --navy-deep: #0f1a2e;
+      --gold: #c9a94e;
+      --gold-light: #e8d48b;
+      --cream: #faf6ed;
+      --cream-soft: #f5efe3;
+      --text-dark: #2c3e50;
+      --text-muted: #6b7c93;
+      --temple-shadow: rgba(26, 39, 68, 0.12);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --max-width: 1100px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+    /* ───── Hero ───── */
+    .hero {
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 20%, rgba(201, 169, 78, 0.08), transparent 60%),
+        linear-gradient(180deg, var(--navy-deep) 0%, var(--navy) 45%, #243555 100%);
+      color: #fff;
+      padding: 100px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(201, 169, 78, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201, 169, 78, 0.04) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border: 1px solid rgba(201, 169, 78, 0.4);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.78);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.65;
+    }
+
+    .store-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .store-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .store-btn.ios {
+      background: #fff;
+      color: var(--navy);
+    }
+    .store-btn.android {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .store-btn svg { width: 22px; height: 22px; }
+
+    /* ───── Features Grid ───── */
+    .features {
+      padding: 80px 24px;
+      background: var(--cream);
+    }
+    .features .container { max-width: var(--max-width); }
+    .section-label {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 50px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: 0 2px 12px var(--temple-shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(26,39,68,0.12); }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+    }
+    .feature-icon.gold { background: rgba(201,169,78,0.12); }
+    .feature-icon.navy { background: rgba(26,39,68,0.08); }
+    .feature-icon.teal { background: rgba(73,180,160,0.1); }
+    .feature-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ───── How It Works ───── */
+    .how-it-works {
+      padding: 80px 24px;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(201,169,78,0.04), transparent 60%),
+        var(--cream-soft);
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      counter-reset: step;
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+    .step h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .step p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ───── Audio Section ───── */
+    .audio-section {
+      padding: 80px 24px;
+      background: var(--navy);
+      color: #fff;
+    }
+    .audio-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .audio-content .section-label { color: var(--gold-light); }
+    .audio-content .section-title { color: #fff; margin-bottom: 20px; }
+    .audio-content p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto; margin-right: auto;
+    }
+    .audio-features {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .audio-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.85);
+    }
+    .audio-pill span { font-size: 1.1rem; }
+
+    /* ───── Translation Banner ───── */
+    .translation-banner {
+      padding: 60px 24px;
+      background: var(--cream);
+      text-align: center;
+    }
+    .translation-banner h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .translation-banner p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto 28px;
+    }
+    .lang-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .lang-tag {
+      padding: 6px 14px;
+      background: rgba(26,39,68,0.06);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+
+    /* ───── CTA ───── */
+    .cta {
+      padding: 80px 24px;
+      background:
+        radial-gradient(ellipse at center, rgba(201,169,78,0.06), transparent 60%),
+        var(--cream-soft);
+      text-align: center;
+    }
+    .cta h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .cta p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 32px;
+    }
+
+    /* ───── Footer ───── */
+    footer {
+      padding: 40px 24px;
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      font-size: 0.82rem;
+    }
+    footer a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    footer a:hover { color: var(--gold-light); }
+    .footer-links { margin-bottom: 12px; }
+    .footer-links a { margin: 0 12px; }
+
+    /* ───── Responsive ───── */
+    @media (max-width: 640px) {
+      .hero { padding: 80px 20px 60px; }
+      .features, .how-it-works, .audio-section, .cta { padding: 60px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .store-buttons { flex-direction: column; align-items: center; }
+      .store-btn { width: 100%; max-width: 280px; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Now Available on iOS & Android</div>
+    <h1>Prepare <span>Powerful Lessons</span><br>in Minutes</h1>
+    <p>AI-powered lesson builder that creates scripture-rich, discussion-driven lessons and talks. Listen to daily devotionals, explore 60+ languages, and share your faith story.</p>
+    <div class="store-buttons">
+      <a href="#" class="store-btn ios" aria-label="Download on the App Store">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        App Store
+      </a>
+      <a href="#" class="store-btn android" aria-label="Get it on Google Play">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.59.34-1.11.84-1.35L13.69 12l-9.85 9.85c-.5-.24-.84-.76-.84-1.35m13.81-5.38L6.05 21.34l8.49-8.49 2.27 2.27m3.35-4.31c.34.27.56.69.56 1.19s-.22.92-.56 1.19l-1.97 1.13-2.5-2.5 2.5-2.5 1.97 1.49M6.05 2.66l10.76 6.22-2.27 2.27-8.49-8.49z"/></svg>
+        Google Play
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="features">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything You Need to Teach with Confidence</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon gold">📖</div>
+        <h3>AI Lesson Builder</h3>
+        <p>Enter any topic and get a complete, scripture-rich lesson in minutes. Choose from instructor-led, team breakout, class engagement, or personal fireside formats.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon navy">🎤</div>
+        <h3>Sacrament Talks</h3>
+        <p>Generate well-structured talks with scripture references, story placeholders, and proper timing. Select your duration and audience — the AI handles the rest.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon teal">🎧</div>
+        <h3>Morning Light Devotionals</h3>
+        <p>Start each day with a short, narrated devotional tied to Come Follow Me. Professional voice narration with scripture read-along.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon gold">🌐</div>
+        <h3>60+ Languages</h3>
+        <p>Export any lesson or talk to over 60 languages with a single tap. Perfect for multilingual wards, branches, and international members.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon navy">🙏</div>
+        <h3>Community Stories</h3>
+        <p>Read and share real faith stories from members worldwide. Testimonies, conversion stories, answered prayers — a growing library of lived experience.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon teal">🗓️</div>
+        <h3>Come Follow Me</h3>
+        <p>Weekly study cards aligned to the current Come Follow Me curriculum. Quick access to this week's topic with one-tap lesson generation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="how-it-works">
+  <div class="container">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">From Topic to Lesson in Three Steps</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Choose a Topic</h3>
+        <p>Pick from Come Follow Me, enter a custom scripture or topic, or browse popular lesson themes.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Set Your Format</h3>
+        <p>Select lesson type, duration, and audience. The AI tailors content for adults, youth, children, or mixed groups.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Teach with Confidence</h3>
+        <p>Get a complete lesson with discussion questions, scriptures, quotes, and stories. Export to PDF or translate instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AUDIO ═══ -->
+<section class="audio-section">
+  <div class="audio-content">
+    <div class="section-label">Listen & Learn</div>
+    <h2 class="section-title">A Library of Faith Audio</h2>
+    <p>Professionally narrated devotionals, firesides, and Easter series. Listen during your commute, workout, or quiet moments.</p>
+    <div class="audio-features">
+      <div class="audio-pill"><span>🌅</span> Morning Light Devotionals</div>
+      <div class="audio-pill"><span>🔥</span> Fireside Talks</div>
+      <div class="audio-pill"><span>✝️</span> Easter Series</div>
+      <div class="audio-pill"><span>📚</span> Come Follow Me Audio</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRANSLATION ═══ -->
+<section class="translation-banner">
+  <h2>Teach the World</h2>
+  <p>Every lesson can be exported to 60+ languages — from Spanish and French to Romanian, Tagalog, and beyond.</p>
+  <div class="lang-grid">
+    <span class="lang-tag">English</span>
+    <span class="lang-tag">Español</span>
+    <span class="lang-tag">Français</span>
+    <span class="lang-tag">Português</span>
+    <span class="lang-tag">Deutsch</span>
+    <span class="lang-tag">Italiano</span>
+    <span class="lang-tag">Română</span>
+    <span class="lang-tag">中文</span>
+    <span class="lang-tag">日本語</span>
+    <span class="lang-tag">한국어</span>
+    <span class="lang-tag">Tagalog</span>
+    <span class="lang-tag">Русский</span>
+    <span class="lang-tag">العربية</span>
+    <span class="lang-tag">हिन्दी</span>
+    <span class="lang-tag">+ 50 more</span>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta">
+  <h2>Ready to Transform Your Teaching?</h2>
+  <p>Download LessonCraft today and spend less time preparing and more time connecting with your class.</p>
+  <div class="store-buttons">
+    <a href="#" class="store-btn ios" style="background:var(--navy); color:#fff;">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download for iOS
+    </a>
+    <a href="#" class="store-btn android" style="background:transparent; border:2px solid var(--navy); color:var(--navy);">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M3 20.5v-17c0-.59.34-1.11.84-1.35L13.69 12l-9.85 9.85c-.5-.24-.84-.76-.84-1.35m13.81-5.38L6.05 21.34l8.49-8.49 2.27 2.27m3.35-4.31c.34.27.56.69.56 1.19s-.22.92-.56 1.19l-1.97 1.13-2.5-2.5 2.5-2.5 1.97 1.49M6.05 2.66l10.76 6.22-2.27 2.27-8.49-8.49z"/></svg>
+      Download for Android
+    </a>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-links">
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms of Service</a>
+    <a href="https://lessoncraft.net/share">Share Your Story</a>
+  </div>
+  <p>© 2026 TRED Technologies LLC. All rights reserved.</p>
+  <p style="margin-top:6px; font-size:0.75rem;">LessonCraft is not affiliated with or endorsed by The Church of Jesus Christ of Latter-day Saints.</p>
+</footer>
+
+</body>
+</html>
